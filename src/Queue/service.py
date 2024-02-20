@@ -12,39 +12,7 @@ STATIC_FOLDER = Configuration.get('OTHERS',
                                   'BACK_URL') + '/' + Configuration.get(
                                       'OTHERS', 'STATIC_FOLDER') + '/images'
 
-
-
-
 ##TODO : Veure si podem fer que la entrada de la funcio send_email sigui un payload i despres asignar valors.
-def send_email(email: str,
-               template: str,
-               subject: str,
-               attachments: List = []):
-    msg = MIMEMultipart('related')
-    msg['Subject'] = subject
-    msg['From'] = Configuration.get('MAIL', 'MAIL_FROM')
-    msg['To'] = email
-
-    try:
-        with SMTP_SSL(Configuration.get('MAIL', 'MAIL_SERVER'),
-                      Configuration.get('MAIL', 'MAIL_PORT')) as server:
-            server.login(Configuration.get('MAIL', 'MAIL_USERNAME'),
-                         Configuration.get('MAIL', 'MAIL_PASSWORD'))
-            #send multipart mail adding images withn add_image_attachment and the html
-            html = MIMEText(template, 'html')
-            msg.attach(html)
-            server.sendmail(Configuration.get('MAIL', 'MAIL_FROM'), [email],
-                            msg.as_string())
-            
-            ##TODO: una manera de treballar amb els 2 models diferents, es indicant manualment cada camp.
-            mail_log = MailLog(user_id_reciver=email,
-                               mail_name=subject,
-                               html=template)
-            save_mail_log()
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-
 async def new_mail( payload:MailQueueBase, db: Session):
     new_mail = MailQueque( **payload.dict())
     db.add(new_mail)
@@ -55,10 +23,5 @@ async def new_mail( payload:MailQueueBase, db: Session):
 
 ##SON 2 Models diferents el MailQuequeBase i el MailLog. si conferteixo mail en diccionari, no tindra les mateixes entrades que MailLog.
 ##TODO: REVISAR !!!
-async def save_mail_log(mail: MailQueueBase, db: Session):
-    mail_log = MailLog(**mail.dict())
-    db.add(mail_log)
-    db.commit()
-    db.refresh(mail_log)
-    return mail_log
+
 

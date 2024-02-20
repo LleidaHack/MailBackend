@@ -30,8 +30,6 @@ def update_template(db: Session, template_id: int, template: MailTemplateUpdate,
     db.refresh(db_template)
     return db_template
 
-##Esto no borra la template sino que la archiva como inactiva. Para borrar la template, mejor que se realize manualmente y no tener un metodo directo
-##De momento no hay router. Si se va a usar, creo el router [me: @big_lolo]
 
 def update_template_status(db: Session, template_id: int, active_template: MailTemplateActive, data: TokenData): 
     db_template = db.query(MailTemplate).filter(MailTemplate.id == template_id).first()
@@ -41,6 +39,8 @@ def update_template_status(db: Session, template_id: int, active_template: MailT
     db.commit()
     db.refresh(db_template)
     return db_template
+
+##TODO: FER UNA PER ACTIVAR I UNA ALTRA PER DESACTIVAR
 
 
 
