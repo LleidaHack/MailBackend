@@ -9,7 +9,7 @@ from error.AuthenticationException import AuthenticationException
 
 from src.Utils import TokenData
 from src.User.model import User as ModelUser
-from src.MailQueue.model import MailQueue as ModelMailQueue
+from src.Queue.model import Queue as ModelQueue
 
 FRONT_LINK = Configuration.get('OTHERS', 'FRONT_URL')
 BACK_LINK = Configuration.get('OTHERS', 'BACK_URL')
@@ -50,27 +50,27 @@ def set_sent(mail, db: Session):
 async def get_last(db: Session, data: TokenData):
     if not data.is_admin:
         raise AuthenticationException("Not authorized")
-    return db.query(ModelMailQueue).filter(
-        ModelMailQueue.sent == False).order_by(
-            ModelMailQueue.id.asc()).first()
+    return db.query(ModelQueue).filter(
+        ModelQueue.sent == False).order_by(
+            ModelQueue.id.asc()).first()
 
 
 async def get_by_id(db: Session, id: int, data: TokenData):
     if not data.is_admin:
         raise AuthenticationException("Not authorized")
-    return db.query(ModelMailQueue).filter(ModelMailQueue.id == id).first()
+    return db.query(ModelQueue).filter(ModelQueue.id == id).first()
 
 
 async def count_unsent(db: Session, data: TokenData):
     if not data.is_admin:
         raise AuthenticationException("Not authorized")
-    unsent_count = db.query(ModelMailQueue).filter(
-        ModelMailQueue.sent == False).count()
+    unsent_count = db.query(ModelQueue).filter(
+        ModelQueue.sent == False).count()
     return unsent_count
 
 
 async def clear_queue(db: Session, data: TokenData):
     if not data.is_admin:
         raise AuthenticationException("Not authorized")
-    db.query(ModelMailQueue).delete()
+    db.query(ModelQueue).delete()
     db.commit()

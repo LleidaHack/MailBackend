@@ -7,8 +7,8 @@ from string import Template
 
 from src.User.model import User as ModelUser
 from src.Event.model import Event as ModelEvent
-from src.MailQueue.model import MailQueue as ModelMailQueue
-from src.MailQueue import service as mail_queue_service
+from src.Queue.model import Queue as ModelQueue
+from src.Queue import service as mail_queue_service
 
 
 class EmailSchema(BaseModel):
@@ -39,7 +39,7 @@ def send_email(user, body: str, subject: str, queue: bool = False):
         mail_queue_service.send_email(mail, body, subject)
     else:
         db = db_get()
-        mail = ModelMailQueue()
+        mail = ModelQueue()
         mail.user_id = user.id
         mail.subject = subject
         mail.body = body
@@ -163,7 +163,7 @@ async def send_dailyhack_open_email(user: ModelUser):
 async def send_all_dailyhack_mails(lst: List):
     out = []
     for u in lst:
-        m = ModelMailQueue()
+        m = ModelQueue()
         m.user_id = u.id
         m.subject = 'Dailyhack Obert'
         m.body = generate_dailyhack_obert_template(u)
@@ -191,7 +191,7 @@ async def send_reminder_email(user: ModelUser):
 async def send_all_reminder_mails(lst: List):
     out = []
     for u in lst:
-        m = ModelMailQueue()
+        m = ModelQueue()
         m.user_id = u.id
         m.subject = 'Reminder'
         m.body = generate_reminder_template(u)
@@ -201,21 +201,5 @@ async def send_all_reminder_mails(lst: List):
     return len(out)
 
 
-def generate_contact_template(name: str, title: str, email: str, message: str):
-    t = Template(
-        open('mail_templates/correu_contacte.html', 'r',
-             encoding='utf-8').read())
-    return t.substitute(name=name,
-                        email=email,
-                        title=title,
-                        message=message,
-                        static_folder=STATIC_FOLDER)
 
-
-async def send_contact_email(name: str, title: str, email: str, message: str):
-    send_email(CONTACT_MAIL,
-               generate_contact_template(name, title, email, message), title)
-
-
-# async def send_event_rejected_email(user: ModelUser, event_name: str):
-#     pass
+    
