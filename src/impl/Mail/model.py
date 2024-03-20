@@ -15,6 +15,7 @@ class Mail(Base):
     id: int = Column(Integer, primary_key=True, index = True)
     ##reciver_id = Column(Integer, nullable=True, unique=True) 
     sender_id = Column(Integer, nullable=False)
+    reciver_id = Column(Integer, nullable=False)
     template_id:int = Column(Integer, ForeignKey('mail-template.id'))
     subject = Column(String)
     receiver_mail = Column(String, index = True)

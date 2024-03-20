@@ -2,6 +2,7 @@ from datetime import date
 from typing import List
 from sqlalchemy import Column, DateTime, Integer, String, Boolean, Date
 from database import Base
+from generated_src.lleida_hack_api_client.models.user_get_all import UserGetAll
 
 class Template(Base):
     __tablename__='template'
@@ -13,5 +14,6 @@ class Template(Base):
     fields: List[str] # calculated
     created_date = Column(Date)
     is_active = Column(Boolean, default=True)   
-    def get_output(values):
-        pass
+    
+    def to_html(self, user:UserGetAll) -> str:
+        return ''
