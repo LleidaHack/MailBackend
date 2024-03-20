@@ -3,6 +3,7 @@ from fastapi_sqlalchemy import db
 
 
 class BaseService():
+
     def needs_service(service):
 
         def wrapper(f):
@@ -23,5 +24,6 @@ class BaseService():
             return get_service
 
         return wrapper
+
     def __init__(self) -> None:
         self.db = db.session

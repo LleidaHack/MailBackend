@@ -50,9 +50,8 @@ def set_sent(mail, db: Session):
 async def get_last(db: Session, data: TokenData):
     if not data.is_admin:
         raise AuthenticationException("Not authorized")
-    return db.query(ModelQueue).filter(
-        ModelQueue.sent == False).order_by(
-            ModelQueue.id.asc()).first()
+    return db.query(ModelQueue).filter(ModelQueue.sent == False).order_by(
+        ModelQueue.id.asc()).first()
 
 
 async def get_by_id(db: Session, id: int, data: TokenData):

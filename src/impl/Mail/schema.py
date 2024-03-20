@@ -1,6 +1,7 @@
 import datetime
 from pydantic import BaseModel
 
+
 class MailSchema(BaseModel):
     id: int
     user_id_reciver: int

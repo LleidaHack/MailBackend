@@ -1,6 +1,7 @@
 from pydantic import BaseModel, ValidationError, validator
 from typing import Optional
 
+
 class MailQueueBase(BaseModel):
     mail_reciver: str
     user_id_sender: int
