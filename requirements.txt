@@ -3,3 +3,4 @@ sqlalchemy
 alembic
 fastapi_sqlalchemy
 importlib
+openapi-python-client
