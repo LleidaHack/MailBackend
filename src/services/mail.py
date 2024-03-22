@@ -199,7 +199,3 @@ async def send_all_reminder_mails(lst: List):
     # return out
     send_bulk_mails(out)
     return len(out)
-
-
-
-    
