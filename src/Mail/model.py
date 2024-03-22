@@ -22,5 +22,5 @@ class Mail(Base):
     html = Column(String)
     fields = Column(String) ##TODO: Hauria de ser un json (@ton)
     sent = Column(Boolean, default = False)
-    template = relationship("MailTemplate")  ##TODO: cambiar nom a template
+    template = relationship("template")  ##TODO:DONE cambiar nom a template
     

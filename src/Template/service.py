@@ -1,9 +1,9 @@
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
 from Template.model import Template as MailTemplate
-from schema import MailTemplateCreate, MailTemplateUpdate, MailTemplateActive
+from schema import TemplateCreate, TemplateUpdate, TemplateActive
 
-def create_template(db: Session, template: MailTemplateCreate, data: TokenData):
+def create_template(db: Session, template: TemplateCreate, data: TokenData):
     db_template = MailTemplate(**template.dict())
     db.add(db_template)
     db.commit()
@@ -20,7 +20,7 @@ def get_all_templates(db: Session, data: TokenData):
     templates = db.query(MailTemplate).order_by(MailTemplate.id).all()
     return templates
 
-def update_template(db: Session, template_id: int, template: MailTemplateUpdate, data: TokenData):
+def update_template(db: Session, template_id: int, template: TemplateUpdate, data: TokenData):
     db_template = db.query(MailTemplate).filter(MailTemplate.id == template_id).first()
     if not db_template:
         raise HTTPException(status_code=404, detail="Template not found")
@@ -31,16 +31,27 @@ def update_template(db: Session, template_id: int, template: MailTemplateUpdate,
     return db_template
 
 
-def update_template_status(db: Session, template_id: int, active_template: MailTemplateActive, data: TokenData): 
+def enable_template(db: Session, template_id: int, data: TokenData): 
     db_template = db.query(MailTemplate).filter(MailTemplate.id == template_id).first()
     if not db_template:
         raise HTTPException(status_code=404, detail="Template not found")
-    db_template.is_active = active_template.is_active
-    db.commit()
-    db.refresh(db_template)
+    if not db_template.is_active:
+        db_template.is_active = True
+        db.commit()
+        db.refresh(db_template)
     return db_template
 
-##TODO: FER UNA PER ACTIVAR I UNA ALTRA PER DESACTIVAR
+def disable_template(db: Session, template_id: int, data: TokenData): 
+    db_template = db.query(MailTemplate).filter(MailTemplate.id == template_id).first()
+    if not db_template:
+        raise HTTPException(status_code=404, detail="Template not found")
+    if db_template.is_active:
+        db_template.is_active = False
+        db.commit()
+        db.refresh(db_template)
+    return db_template
+
+##TODO:DONE (COMPROBAR) FER UNA PER ACTIVAR I UNA ALTRA PER DESACTIVAR
 
 
 

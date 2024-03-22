@@ -3,7 +3,7 @@ from typing import List, Optional
 
 from src.Template.validator import validate_html
 
-class MailTemplateCreate(BaseModel):
+class TemplateCreate(BaseModel):
     name: str
     description: str
     html: str
@@ -12,7 +12,7 @@ class MailTemplateCreate(BaseModel):
     def html_must_have_body(cls, v):
         return validate_html(cls, v)
     
-class MailTemplateUpdate(BaseModel):
+class TemplateUpdate(BaseModel):
     name: Optional[str]
     description: Optional[str]
     html: Optional[str]
@@ -21,7 +21,7 @@ class MailTemplateUpdate(BaseModel):
     def html_must_have_body(cls, v):
         return validate_html(cls, v)
     
-class MailTemplate(MailTemplateCreate):  ##TODO: FICAR TEMPLATEGET
+class TemplateGet(BaseModel):  ##TODO:DONE (COMPROBAR) FICAR TEMPLATEGET
     name: str
     description: str
     html: str
@@ -29,11 +29,13 @@ class MailTemplate(MailTemplateCreate):  ##TODO: FICAR TEMPLATEGET
 
     class Config:
         orm_mode = True
+    
 
 
-class MailTemplateActive(BaseModel):
+
+class TemplateActiveStatus(BaseModel):
     is_active: bool
     
-##TODO: CAMBIAR NOM A TEMPLATE
+##TODO:DONE (COMPROBAR) CAMBIAR NOM A TEMPLATE
     
     ##TODO: ELS IMPORTS AMB EL SRC (ABSOLUT)
