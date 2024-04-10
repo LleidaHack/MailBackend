@@ -1,4 +1,5 @@
 config.ini
+src/configuration/*.yaml
 generated_src/**
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -26,4 +26,4 @@ class BaseService():
         return wrapper
 
     def __init__(self) -> None:
-        self.db = db.session
+        self.db = db.session.session

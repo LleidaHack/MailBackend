@@ -1,8 +1,9 @@
-from typing import List, Union
-from sqlalchemy.orm import Session
-from fastapi import Depends, Response, APIRouter
+from typing import List
+from fastapi import APIRouter
 
-from Template.schema import MailTemplateCreate, MailTemplateUpdate, MailTemplateActive, MailTemplate
+from Template.schema import TemplateCreate as TemplateCreateSchema
+from Template.schema import TemplateUpdate as TemplateUpdateSchema
+from Template.schema import TemplateGet as TemplateGetSchema
 import Template.service as service_template
 
 router = APIRouter(
@@ -11,34 +12,29 @@ router = APIRouter(
 )
 
 
-@router.get("/all", response_model=List[MailTemplate])
-async def get_all_templates(db: Session = Depends(get_db),
-                            token: str = Depends(JWTBearer())):
-    return await service_template.get_all_templates(
-        db, get_data_from_token(token)
-    )  ##Veure que fer amb el tema del token al final..
+@router.get("/all", response_model=List[TemplateGetSchema])
+def get_all():
+    return service_template.get_all()  ##Veure que fer amb el tema del token al final..
 
 
-@router.get("/{userId}", response_model=[MailTemplate])
-async def get_template(template_id: int,
-                       db: Session = Depends(get_db),
-                       token=Depends(JWTBearer())):
-    return await service_template.get_template(db, template_id,
-                                               get_data_from_token(token))
+@router.get("/{id}", response_model=[TemplateGetSchema])
+def get(id: int):
+    return service_template.get_by_id(id)
 
 
 @router.put("/{userId}")
-async def update_template(template_id: int,
-                          payload: MailTemplateCreate,
-                          db: Session = Depends(get_db),
-                          token=Depends(JWTBearer())):
-    return await service_template.update_template(db, template_id, payload,
-                                                  get_data_from_token(token))
+def update(id: int, payload: TemplateUpdateSchema):
+    return service_template.update(id, payload)
 
 
-@router.post("/", response_model=MailTemplate)
-async def create_template(payload: MailTemplateCreate,
-                          db: Session = Depends(get_db),
-                          token=Depends(JWTBearer())):
-    return await service_template.create_template(db, payload,
-                                                  get_data_from_token(token))
+@router.post("/", response_model=TemplateGetSchema)
+def create(payload: TemplateCreateSchema):
+    return service_template.create(payload)
+
+@router.put("/activate/{id}")
+def activate(id: int):
+    return service_template.activate(id)
+
+@router.put("/deactivate/{id}")
+def deactivate(id: int):
+    return service_template.deactivate(id)

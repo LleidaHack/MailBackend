@@ -1,43 +1,41 @@
 from pydantic import BaseModel, ValidationError, validator
 from typing import List, Optional
 
-from src.Template.validator import validate_html
+from sqlalchemy import Date
+
+from utils.Base.BaseSchema import BaseSchema
 
 
-class MailTemplateCreate(BaseModel):
+class TemplateGet(BaseSchema):
+    name: str
+    description: str
+    html: str
+    created_date: Date
+
+class TemplateGetAll(BaseSchema):
+    id: int
+    creator_id: int
+    is_active: bool
+
+class TemplateCreate(BaseModel):
     name: str
     description: str
     html: str
 
     @validator('html')
     def html_must_have_body(cls, v):
-        return validate_html(cls, v)
+        if '<body>' not in v.html:
+            raise ValueError('HTML must have a <body> tag')
+        return True
 
 
-class MailTemplateUpdate(BaseModel):
+class TemplateUpdate(BaseSchema):
     name: Optional[str]
     description: Optional[str]
     html: Optional[str]
 
     @validator('html')
     def html_must_have_body(cls, v):
-        return validate_html(cls, v)
-
-
-class MailTemplate(MailTemplateCreate):  ##TODO: FICAR TEMPLATEGET
-    name: str
-    description: str
-    html: str
-    is_active: bool
-
-    class Config:
-        orm_mode = True
-
-
-class MailTemplateActive(BaseModel):
-    is_active: bool
-
-
-##TODO: CAMBIAR NOM A TEMPLATE
-
-##TODO: ELS IMPORTS AMB EL SRC (ABSOLUT)
+        if '<body>' not in v.html:
+            raise ValueError('HTML must have a <body> tag')
+        return True

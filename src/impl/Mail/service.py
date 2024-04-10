@@ -1,50 +1,80 @@
 from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 from smtplib import SMTP_SSL
 from fastapi import HTTPException
-from sqlalchemy.orm import Session
-from Mail import model
-from generated_src.lleida_hack_api_client.models.user_get_all import UserGetAll
-from schema import MailSchema
+from fastapi_sqlalchemy import db
+from sqlalchemy import asc, desc
+from src.configuration.Configuration import Configuration
 from src.impl.Mail.model import Mail as MailModel
-from src.impl.Template.model import Template as TemplateModel
 from src.utils.Base.BaseService import BaseService
+from src.impl.Mail.schema import MailCreate as MailCreateSchema
+from utils.service_utils import set_existing_data
 
-
-##La idea de aquesta funcio es guardar el correu a la base de dades. Com que no tindrá router, en realitat el archiu no hauria de ser service, no?? :(
-##TODO: REVISAR
 class MailService(BaseService):
 
     def get_all(self):
-        mail = self.db.query(MailModel).all()
+        mail = db.session.query(MailModel).all()
         return mail
-
-    def get_by_id(self, id):
-        mail = self.db.query(MailModel).filter(MailModel.id == id).first()
+    
+    def get_by_id(self, id) -> MailModel:
+        mail = db.session.query(MailModel).filter(MailModel.id == id).first()
         if mail is None:
             raise Exception()
         return mail
 
-    # def send_email(mail_id: int):
-    # @BaseService.needs_service(TemplateService)
-    def send(self, mail: MailModel):
+    def create(self, payload: MailCreateSchema):
+        mail = MailModel(**payload.dict(), sent = False)
+        db.session.add(mail)
+        db.session.commit()
+        return mail
+    
+    def update(self, id:int, payload: MailCreateSchema):
+        mail = self.get_by_id(id)
+        update = set_existing_data(mail, payload)
+        db.session.commit()
+        db.session.refresh(mail)
+        return mail, update
+
+    def set_sent(mail:MailModel):
+        if mail.sent:
+            raise Exception("An exception occurred.")
+        mail.sent = True
+        db.session.commit()
+        db.session.refresh(mail)
+
+    def send_by_id(self, id:int):
+        mail = self.get_by_id(id)
+        if mail.sent:
+            Exception()
+        self.real_send(mail)
+        self.set_sent(mail)
+
+    def send_next(self):
+        mail = db.session.session.query(MailModel).filter(MailModel.sent == False).order_by(desc(MailModel.priority)).order_by(asc(MailModel.creation_date)).first()
+        if mail is None:
+            raise Exception()
+        if mail.sent:
+            Exception()
+        self.real_send(mail)
+        self.set_sent(mail)
+
+    
+    def real_send(self, mail:MailModel):
         user = None
         msg = MIMEMultipart('related')
         msg['Subject'] = mail.subject
-        msg['From'] = Configuration.get('MAIL', 'MAIL_FROM')
+        msg['From'] = Configuration.mail.from_mail
         msg['To'] = mail.receiver_mail
-
         try:
-            with SMTP_SSL(Configuration.get('MAIL', 'MAIL_SERVER'),
-                          Configuration.get('MAIL', 'MAIL_PORT')) as server:
-                server.login(Configuration.get('MAIL', 'MAIL_USERNAME'),
-                             Configuration.get('MAIL', 'MAIL_PASSWORD'))
-                #send multipart mail adding images withn add_image_attachment and the html
+            with SMTP_SSL(Configuration.mail.server,
+                        Configuration.mail.port) as server:
+                server.login(Configuration.mail.username,
+                            Configuration.mail.password)
                 html = MIMEText(mail.template.to_html(user), 'html')
                 msg.attach(html)
-                server.sendmail(Configuration.get('MAIL', 'MAIL_FROM'),
-                                [user.email], msg.as_string())
-
-                ##TODO: s'hauria de modificar el send a true de la taula de mail.
-
+                if Configuration.mail.send_mails:
+                    server.sendmail(Configuration.mail.from_mail, [user.email], msg.as_string())
+                else:
+                    print('Mail sending is disabled i you really want to send mails enable it in the config')
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))

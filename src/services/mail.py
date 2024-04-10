@@ -25,8 +25,8 @@ STATIC_FOLDER = Configuration.get('OTHERS',
 
 def send_bulk_mails(lst: List):
     db = db_get()
-    db.bulk_save_objects(lst)
-    db.commit()
+    db.session.bulk_save_objects(lst)
+    db.session.commit()
 
 
 def send_email(user, body: str, subject: str, queue: bool = False):
@@ -43,8 +43,8 @@ def send_email(user, body: str, subject: str, queue: bool = False):
         mail.user_id = user.id
         mail.subject = subject
         mail.body = body
-        db.add(mail)
-        db.commit()
+        db.session.add(mail)
+        db.session.commit()
 
 
 def generate_registration_confirmation_template(user: ModelUser):

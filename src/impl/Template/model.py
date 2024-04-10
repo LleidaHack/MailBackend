@@ -1,9 +1,10 @@
 from datetime import date
 from typing import List
 from sqlalchemy import Column, DateTime, Integer, String, Boolean, Date
-from database import Base
+from src.utils.database import Base
 from generated_src.lleida_hack_api_client.models.user_get_all import UserGetAll
-
+from string import Template as TemplateUtil
+from sqlalchemy import orm
 
 class Template(Base):
     __tablename__ = 'template'
@@ -12,9 +13,21 @@ class Template(Base):
     name: str = Column(String, nullable=False)
     description: str = Column(String)
     html: str = Column(String, nullable=False)
-    fields: List[str]  # calculated
     created_date = Column(Date)
     is_active = Column(Boolean, default=True)
+    __template: TemplateUtil
 
-    def to_html(self, user: UserGetAll) -> str:
-        return ''
+    @orm.reconstructor
+    def init_on_load(self):
+        self.__template = TemplateUtil(self.html)
+        
+    @property
+    def fields(self) -> List[str]:
+        return self.__template.get_identifiers()
+
+    def add_base_values():
+        pass
+    
+    def to_html(self, values: list[str]) -> str:
+        data = dict(zip(self.fields, values))
+        return self.__template.substitute(data)

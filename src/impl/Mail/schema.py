@@ -1,11 +1,30 @@
-import datetime
-from pydantic import BaseModel
+from datetime import date
+from typing import Optional
+from src.utils.Base.BaseSchema import BaseSchema
 
 
-class MailSchema(BaseModel):
+class MailGet(BaseSchema):
     id: int
-    user_id_reciver: int
-    user_id_sender: int
-    mail_name: str
-    date: datetime
-    html: str
+    sender_id: int
+    reciver_id: Optional[str] #a list of int separated by ,
+    template_id: int
+    subject: str
+    receiver_mail: Optional[str] #a list of int separated by ,
+    date: date
+    # html: str
+    fields: str  ##TODO: Hauria de ser un json (@ton)
+    sent: bool
+    # template
+class MailGetAll(MailGet):
+    pass
+class MailCreate(BaseSchema):
+    sender_id: int
+    reciver_id: Optional[str] #a list of int separated by ,
+    template_id: int
+    subject: str
+    receiver_mail: Optional[str] #a list of int separated by ,
+    date: date
+    # html: str
+    fields: str  ##TODO: Hauria de ser un json (@ton)
+
+# class MailUpdate(BaseSchema):
