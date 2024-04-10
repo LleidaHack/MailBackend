@@ -12,10 +12,12 @@ class TemplateGet(BaseSchema):
     html: str
     created_date: Date
 
+
 class TemplateGetAll(BaseSchema):
     id: int
     creator_id: int
     is_active: bool
+
 
 class TemplateCreate(BaseModel):
     name: str

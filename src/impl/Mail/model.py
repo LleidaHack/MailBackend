@@ -9,6 +9,7 @@ from sqlalchemy.sql import func
 from src.utils.database import Base
 from src.impl.Template.model import Template as TemplateModel
 
+
 class Mail(Base):
     __tablename__ = 'mail'
     id: int = Column(Integer, primary_key=True, index=True)
@@ -23,7 +24,7 @@ class Mail(Base):
     html = Column(String)
     fields = Column(String)  ##TODO: Hauria de ser un json (@ton)
     sent = Column(Boolean, default=False)
-    template:TemplateModel = relationship(TemplateModel)
+    template: TemplateModel = relationship(TemplateModel)
     priority = Column(Integer,
                       CheckConstraint('priority >= 0 AND priority <= 3'),
                       default=3)

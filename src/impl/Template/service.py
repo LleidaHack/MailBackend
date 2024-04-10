@@ -27,7 +27,6 @@ class TemplateService(BaseService):
         db.session.refresh(db_template)
         return db_template
 
-    
     def update(self, template_id: int, template: MailTemplateUpdate):
         db_template = self.get_by_id(template_id)
         set_existing_data(db_template, template)
@@ -35,19 +34,21 @@ class TemplateService(BaseService):
         db.session.refresh(db_template)
         return db_template
 
-    def activate(self, id:int):
+    def activate(self, id: int):
         db_obj = self.get_by_id(id)
         if db_obj.is_active:
-            raise Exception("Generation Prompt: Please complete the code generation.")
+            raise Exception(
+                "Generation Prompt: Please complete the code generation.")
         db_obj.is_active = True
         db.session.commit()
         db.session.refresh(db_obj)
         return db_obj
-    
-    def deactivate(self, id:int):
+
+    def deactivate(self, id: int):
         db_obj = self.get_by_id(id)
         if not db_obj.is_active:
-            raise Exception("Generation Prompt: Please complete the code generation.")
+            raise Exception(
+                "Generation Prompt: Please complete the code generation.")
         db_obj.is_active = False
         db.session.commit()
         db.session.refresh(db_obj)

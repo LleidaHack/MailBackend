@@ -17,13 +17,13 @@ app = FastAPI(title="LleidaHack API",
               swagger_ui_parameters={"syntaxHighlight.theme": "obsidian"})
 
 app.add_middleware(
-        CORSMiddleware,
-        allow_origins=["localhost:8000"],
-        allow_credentials=True,
-        allow_methods=["*"],
-        allow_headers=["*"],
-        expose_headers=["*"],
-    )
+    CORSMiddleware,
+    allow_origins=["localhost:8000"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+    expose_headers=["*"],
+)
 
 app.add_middleware(DBSessionMiddleware, db_url=Configuration.database.url)
 
@@ -33,7 +33,7 @@ if __name__ == "__main__":
     parser.add_argument('-i', '--integration')
     parser.add_argument('-m', '--main')
     args = parser.parse_args()
-    
+
     Configuration()
     #run server
     uvicorn.run(app)

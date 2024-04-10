@@ -14,7 +14,8 @@ router = APIRouter(
 
 @router.get("/all", response_model=List[TemplateGetSchema])
 def get_all():
-    return service_template.get_all()  ##Veure que fer amb el tema del token al final..
+    return service_template.get_all(
+    )  ##Veure que fer amb el tema del token al final..
 
 
 @router.get("/{id}", response_model=[TemplateGetSchema])
@@ -31,9 +32,11 @@ def update(id: int, payload: TemplateUpdateSchema):
 def create(payload: TemplateCreateSchema):
     return service_template.create(payload)
 
+
 @router.put("/activate/{id}")
 def activate(id: int):
     return service_template.activate(id)
+
 
 @router.put("/deactivate/{id}")
 def deactivate(id: int):
