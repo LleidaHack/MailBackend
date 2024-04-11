@@ -5,3 +5,5 @@ fastapi_sqlalchemy
 importlib
 argparse
 fastapi-mail
+httpx
+ubicorn

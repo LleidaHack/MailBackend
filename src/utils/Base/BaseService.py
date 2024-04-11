@@ -1,5 +1,4 @@
 import importlib
-from fastapi_sqlalchemy import db
 
 
 class BaseService():
@@ -24,6 +23,3 @@ class BaseService():
             return get_service
 
         return wrapper
-
-    def __init__(self) -> None:
-        self.db = db.session.session

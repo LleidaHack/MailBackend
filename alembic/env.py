@@ -4,9 +4,9 @@ from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 
 from alembic import context
-from database import Base
+from src.utils.database import Base
 
-from config import Configuration
+from src.configuration.Configuration import Configuration
 
 from src import imports
 # this is the Alembic Config object, which provides
@@ -14,7 +14,7 @@ from src import imports
 config = context.config
 
 config.set_main_option('sqlalchemy.url',
-                       Configuration.get("POSTGRESQL", "DATABASE_URL"))
+                       Configuration.database.url)
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.

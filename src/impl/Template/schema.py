@@ -24,7 +24,7 @@ class TemplateCreate(BaseModel):
 
     @validator('html')
     def html_must_have_body(cls, v):
-        if '<body>' not in v.html:
+        if '<body>' not in v.html or '</body>' not in v.html:
             raise ValueError('HTML must have a <body> tag')
         return True
 
