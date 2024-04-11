@@ -7,6 +7,7 @@ from sqlalchemy.sql import func
 from src.utils.database import Base
 from src.impl.Template.model import Template as TemplateModel
 
+
 class Mail(Base):
     __tablename__ = 'mail'
     id: int = Column(Integer, primary_key=True, index=True)
