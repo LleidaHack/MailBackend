@@ -1,4 +1,3 @@
-
 from datetime import date
 from pydantic import BaseModel, ValidationError, validator
 from typing import List, Optional

@@ -12,7 +12,9 @@ from generated_src.lleida_hack_api_client.types import Response
 class UserClient(BaseClient):
     name = 'user_client'
 
-    def __init__(self, url=Configuration.client.url, token=Configuration.client.service_token) -> Any:
+    def __init__(self,
+                 url=Configuration.client.url,
+                 token=Configuration.client.service_token) -> Any:
         super().__init__(url, token)
 
     def get_all(self) -> List:

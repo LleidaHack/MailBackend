@@ -30,9 +30,10 @@ app = FastAPI(title="LleidaHack API",
 app.add_middleware(DBSessionMiddleware, db_url=Configuration.database.url)
 from src.impl.Mail.router import router as mail_router
 from src.impl.Template.router import router as template_router
+
 app.include_router(mail_router)
 app.include_router(template_router)
-CONFIG_PATH = path.join('src','configuration')
+CONFIG_PATH = path.join('src', 'configuration')
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('-l', '--local', action="store_true")

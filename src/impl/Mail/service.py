@@ -13,7 +13,7 @@ from src.utils.service_utils import set_existing_data
 
 class MailService(BaseService):
     name = 'mail_service'
-    
+
     def get_all(self):
         mail = db.session.query(MailModel).all()
         return mail
