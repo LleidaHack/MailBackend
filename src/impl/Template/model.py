@@ -1,6 +1,6 @@
 from datetime import date
 from typing import List
-from sqlalchemy import Column, Integer, String, Boolean, Date
+from sqlalchemy import Column, Integer, String, Boolean, Date, func
 from src.utils.database import Base
 # from generated_src.lleida_hack_api_client.models.user_get_all import UserGetAll
 from string import Template as TemplateUtil
@@ -14,7 +14,7 @@ class Template(Base):
     name: str = Column(String, nullable=False)
     description: str = Column(String)
     html: str = Column(String, nullable=False)
-    created_date = Column(Date)
+    created_date = Column(Date, default=func.current_date())
     is_active = Column(Boolean, default=True)
     # __template: TemplateUtil
 
@@ -29,7 +29,7 @@ class Template(Base):
     def add_base_values():
         pass
 
-    def to_html(self, values: list[str]) -> str:
+    def to_html(self, values: List[str]) -> str:
         if not len(self.fields) == len(values):
             raise Exception()
         data = dict(zip(self.fields, values))

@@ -1,43 +1,44 @@
 from typing import List
 from fastapi import APIRouter
 
-from Template.schema import TemplateCreate as TemplateCreateSchema
-from Template.schema import TemplateUpdate as TemplateUpdateSchema
-from Template.schema import TemplateGet as TemplateGetSchema
-import Template.service as service_template
+from src.impl.Template.schema import TemplateCreate as TemplateCreateSchema
+from src.impl.Template.schema import TemplateUpdate as TemplateUpdateSchema
+from src.impl.Template.schema import TemplateGet as TemplateGetSchema
+from src.impl.Template.schema import TemplateGetAll as TemplateGetAllSchema
+from src.impl.Template.service import TemplateService
 
 router = APIRouter(
-    prefix="/mailTemplate",
-    tags=["MailTemplate"],
+    prefix="/emplate",
+    tags=["template"],
 )
 
+template_service = TemplateService()
 
 @router.get("/all", response_model=List[TemplateGetSchema])
 def get_all():
-    return service_template.get_all(
-    )  ##Veure que fer amb el tema del token al final..
+    return template_service.get_all()
 
 
-@router.get("/{id}", response_model=[TemplateGetSchema])
+@router.get("/{id}", response_model=TemplateGetSchema)
 def get(id: int):
-    return service_template.get_by_id(id)
+    return template_service.get_by_id(id)
 
 
-@router.put("/{userId}")
+@router.put("/{id}")
 def update(id: int, payload: TemplateUpdateSchema):
-    return service_template.update(id, payload)
+    return template_service.update(id, payload)
 
 
-@router.post("/", response_model=TemplateGetSchema)
+@router.post("/", response_model=TemplateGetAllSchema)
 def create(payload: TemplateCreateSchema):
-    return service_template.create(payload)
+    return template_service.create(payload)
 
 
-@router.put("/activate/{id}")
+@router.put("/{id}/activate")
 def activate(id: int):
-    return service_template.activate(id)
+    return template_service.activate(id)
 
 
-@router.put("/deactivate/{id}")
+@router.put("/{id}/deactivate")
 def deactivate(id: int):
-    return service_template.deactivate(id)
+    return template_service.deactivate(id)

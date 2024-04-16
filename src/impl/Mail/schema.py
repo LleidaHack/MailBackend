@@ -24,6 +24,7 @@ class MailGetAll(MailGet):
 class MailCreate(BaseSchema):
     sender_id: int
     reciver_id: Optional[str]  #a list of int separated by ,
+    reciver_id: Optional[str]  #a list of int separated by ,
     template_id: int
     subject: str
     receiver_mail: Optional[str]  #a list of int separated by ,
@@ -32,4 +33,5 @@ class MailCreate(BaseSchema):
     fields: str  ##TODO: Hauria de ser un json (@ton)
 
 
-# class MailUpdate(BaseSchema):
+class MailUpdate(BaseSchema):
+    pass

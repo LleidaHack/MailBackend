@@ -8,11 +8,12 @@ from src.configuration.Configuration import Configuration
 from src.impl.Mail.model import Mail as MailModel
 from src.utils.Base.BaseService import BaseService
 from src.impl.Mail.schema import MailCreate as MailCreateSchema
-from utils.service_utils import set_existing_data
+from src.utils.service_utils import set_existing_data
 
 
 class MailService(BaseService):
-
+    name = 'mail_service'
+    
     def get_all(self):
         mail = db.session.query(MailModel).all()
         return mail

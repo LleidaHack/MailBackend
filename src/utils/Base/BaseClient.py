@@ -1,7 +1,7 @@
 import importlib
 from typing import Any, overload
 
-from generated_src.lleida_hack_api_client.client import AuthenticatedClient
+from generated_src.lleida_hack_api_client.client import AuthenticatedClient, Client
 
 
 #TODO: must be singleton
@@ -31,6 +31,8 @@ class BaseClient():
     # def __init__(self, url='http://localhost:8000', token='HOLA') -> Any:
     @overload
     def __init__(self, url, token) -> Any:
+        if token is None:
+            self.__client = Client(base_url=url)
         self.__client = AuthenticatedClient(base_url=url, token=token)
 
     @property
