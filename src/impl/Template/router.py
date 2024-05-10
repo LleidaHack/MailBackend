@@ -15,6 +15,7 @@ router = APIRouter(
 
 template_service = TemplateService()
 
+
 @router.get("/all", response_model=List[TemplateGetSchema])
 def get_all():
     return template_service.get_all()

@@ -9,6 +9,7 @@ from src.utils.service_utils import set_existing_data
 
 class TemplateService(BaseService):
     name = 'template_service'
+
     def get_all(self):
         return db.session.query(ModelTemplate).all()
 
