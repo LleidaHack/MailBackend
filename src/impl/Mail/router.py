@@ -1,10 +1,11 @@
 from typing import List
-from fastapi import APIRouter
-from src.impl.Mail.service import MailService
 
-from src.impl.Mail.schema import MailGet as MailGetSchema
+from fastapi import APIRouter
+
 from src.impl.Mail.schema import MailCreate as MailCreateSchema
+from src.impl.Mail.schema import MailGet as MailGetSchema
 from src.impl.Mail.schema import MailUpdate as MailUpdateSchema
+from src.impl.Mail.service import MailService
 
 router = APIRouter(
     prefix="/mail",

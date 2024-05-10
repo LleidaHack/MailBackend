@@ -1,13 +1,14 @@
 import importlib
 from typing import Any, overload
 
-from generated_src.lleida_hack_api_client.client import AuthenticatedClient, Client
+from generated_src.lleida_hack_api_client.client import (AuthenticatedClient,
+                                                         Client)
 
 
 #TODO: must be singleton
 class BaseClient():
 
-    def needs_service(client):
+    def needs_client(client):
 
         def wrapper(f):
 
@@ -20,7 +21,7 @@ class BaseClient():
                     cli = getattr(cli, client)
                 if getattr(s, cli.name) is None:
                     setattr(s, cli.name, cli())
-
+                return f(*args)
             return get_client
 
         return wrapper
@@ -29,14 +30,14 @@ class BaseClient():
         self.__client = None
 
     # def __init__(self, url='http://localhost:8000', token='HOLA') -> Any:
-    @overload
-    def __init__(self, url, token) -> Any:
-        if token is None:
-            self.__client = Client(base_url=url)
-        self.__client = AuthenticatedClient(base_url=url, token=token)
+    # @overload
+    # def __init__(self, url, token) -> Any:
+    #     if token is None:
+    #         self.__client = Client(base_url=url)
+    #     self.__client = AuthenticatedClient(base_url=url, token=token)
 
     @property
     def client(self):
-        if self.client is None or self.url is None:
+        if self.__client is None or self.url is None:
             raise Exception()
         return self.__client

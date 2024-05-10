@@ -1,13 +1,16 @@
 import argparse
 from os import path
+
+import uvicorn
 from fastapi import FastAPI
 from fastapi_sqlalchemy import DBSessionMiddleware
-import uvicorn
+from src.impl.Template.service import TemplateService
 
 from src.configuration.Configuration import Configuration
+from src.versions.v1 import router
 
 tags_metadata = {}
-
+print(__name__)
 app = FastAPI(title="LleidaHack API",
               description="LleidaHack API",
               version="2.0",
@@ -15,8 +18,7 @@ app = FastAPI(title="LleidaHack API",
               redoc_url='/redoc',
               openapi_url='/openapi.json',
               openapi_tags=tags_metadata,
-              debug=True,
-              swagger_ui_parameters={"syntaxHighlight.theme": "obsidian"})
+              debug=True)
 
 # app.add_middleware(
 #     CORSMiddleware,
@@ -28,10 +30,8 @@ app = FastAPI(title="LleidaHack API",
 # )
 
 app.add_middleware(DBSessionMiddleware, db_url=Configuration.database.url)
-from src.impl.Mail.router import router as mail_router
-from src.impl.Template.router import router as template_router
-app.include_router(mail_router)
-app.include_router(template_router)
+
+app.include_router(router)
 CONFIG_PATH = path.join('src','configuration')
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

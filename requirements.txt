@@ -2,8 +2,9 @@ fastapi
 sqlalchemy
 alembic
 fastapi_sqlalchemy
-importlib
+# importlib
 argparse
 fastapi-mail
 httpx
-ubicorn
+uvicorn
+openapi-python-client

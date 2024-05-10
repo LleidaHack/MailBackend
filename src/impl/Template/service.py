@@ -1,27 +1,26 @@
 from fastapi import HTTPException
 from fastapi_sqlalchemy import db
-from sqlalchemy.orm import Session
-from src.impl.Template.model import Template as MailTemplate
+
+from src.impl.Template.model import Template as ModelTemplate
 from src.impl.Template.schema import TemplateCreate, TemplateUpdate
 from src.utils.Base.BaseService import BaseService
-from src.impl.Template.model import Template as ModelTemplate
 from src.utils.service_utils import set_existing_data
 
 
 class TemplateService(BaseService):
     name = 'template_service'
     def get_all(self):
-        return db.session.query(MailTemplate).all()
+        return db.session.query(ModelTemplate).all()
 
-    def get_by_id(self, id) -> MailTemplate:
-        template = db.session.query(MailTemplate).filter(
-            MailTemplate.id == id).first()
+    def get_by_id(self, id) -> ModelTemplate:
+        template = db.session.query(ModelTemplate).filter(
+            ModelTemplate.id == id).first()
         if not template:
             raise HTTPException(status_code=404, detail="Template not found")
         return template
 
     def create(self, template: TemplateCreate):
-        db_template = MailTemplate(**template.dict())
+        db_template = ModelTemplate(**template.dict())
         db.session.add(db_template)
         db.session.commit()
         db.session.refresh(db_template)
@@ -53,3 +52,4 @@ class TemplateService(BaseService):
         db.session.commit()
         db.session.refresh(db_obj)
         return db_obj
+

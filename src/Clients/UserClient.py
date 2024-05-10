@@ -1,19 +1,20 @@
 from ast import List
 from typing import Any
-from configuration.Configuration import Configuration
+
+from src.configuration.Configuration import Configuration
 from generated_src.lleida_hack_api_client.api.user import get_user, get_users
 from generated_src.lleida_hack_api_client.models.user_get import UserGet
-from src.utils.Base.BaseClient import BaseClient
-
 from generated_src.lleida_hack_api_client.models.user_get_all import UserGetAll
 from generated_src.lleida_hack_api_client.types import Response
+from src.utils.Base.BaseClient import BaseClient
 
 
 class UserClient(BaseClient):
     name = 'user_client'
 
     def __init__(self, url=Configuration.client.url, token=Configuration.client.service_token) -> Any:
-        super().__init__(url, token)
+        # super().__init__(url, token)
+        pass
 
     def get_all(self) -> List:
         with self.client as client:

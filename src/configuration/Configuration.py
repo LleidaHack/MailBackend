@@ -1,5 +1,6 @@
-import types
 import os
+import types
+
 import yaml
 
 
@@ -53,6 +54,5 @@ class Configuration:
                     # setattr(Configuration.CONFIG, k, v)
                 else:
                     setattr(Configuration, k, v)
-
 
 Configuration()

@@ -1,19 +1,23 @@
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from smtplib import SMTP_SSL
+
 from fastapi import HTTPException
 from fastapi_sqlalchemy import db
 from sqlalchemy import asc, desc
+
+from src.Clients.UserClient import UserClient
 from src.configuration.Configuration import Configuration
 from src.impl.Mail.model import Mail as MailModel
-from src.utils.Base.BaseService import BaseService
 from src.impl.Mail.schema import MailCreate as MailCreateSchema
+from src.utils.Base.BaseService import BaseService
 from src.utils.service_utils import set_existing_data
+from src.utils.Base.BaseClient import BaseClient
 
 
 class MailService(BaseService):
     name = 'mail_service'
-    
+    user_client = None
     def get_all(self):
         mail = db.session.query(MailModel).all()
         return mail
@@ -23,10 +27,13 @@ class MailService(BaseService):
         if mail is None:
             raise Exception()
         return mail
-
+    
+    # @BaseClient.needs_client(UserClient)
     def create(self, payload: MailCreateSchema):
         mail = MailModel(**payload.dict(), sent=False)
         db.session.add(mail)
+        # self.user_client.get_by_id(mail.reciver_id)
+        # self.user_client.get_by_id(mail.sender_id)
         db.session.commit()
         return mail
 
@@ -37,7 +44,7 @@ class MailService(BaseService):
         db.session.refresh(mail)
         return mail, update
 
-    def set_sent(mail: MailModel):
+    def set_sent(self, mail: MailModel):
         if mail.sent:
             raise Exception("An exception occurred.")
         mail.sent = True
@@ -47,9 +54,10 @@ class MailService(BaseService):
     def send_by_id(self, id: int):
         mail = self.get_by_id(id)
         if mail.sent:
-            Exception()
-        self.real_send(mail)
+            Exception('sent?')
+        r = self.real_send(mail)
         self.set_sent(mail)
+        return r
 
     def send_next(self):
         mail = db.session.session.query(MailModel).filter(
@@ -64,7 +72,7 @@ class MailService(BaseService):
         self.set_sent(mail)
 
     def real_send(self, mail: MailModel):
-        user = None
+        # u = self.user_client.get_by_id(mail.sender_id)
         msg = MIMEMultipart('related')
         msg['Subject'] = mail.subject
         msg['From'] = Configuration.mail.from_mail
@@ -74,14 +82,16 @@ class MailService(BaseService):
                           Configuration.mail.port) as server:
                 server.login(Configuration.mail.username,
                              Configuration.mail.password)
-                html = MIMEText(mail.template.to_html(user), 'html')
+                html = MIMEText(mail.template.to_html(mail.fields.replace(' ', '').split(',')), 'html')
                 msg.attach(html)
                 if Configuration.mail.send_mails:
-                    server.sendmail(Configuration.mail.from_mail, [user.email],
+                    # server.sendmail(Configuration.mail.from_mail, [user.email],
+                    server.sendmail(Configuration.mail.from_mail, [mail.receiver_mail.replace(' ', '').split(',')],
                                     msg.as_string())
                 else:
                     print(
                         'Mail sending is disabled i you really want to send mails enable it in the config'
                     )
         except Exception as e:
+            raise e
             raise HTTPException(status_code=500, detail=str(e))

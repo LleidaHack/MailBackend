@@ -1,14 +1,15 @@
 from typing import List
+
 from fastapi import APIRouter
 
 from src.impl.Template.schema import TemplateCreate as TemplateCreateSchema
-from src.impl.Template.schema import TemplateUpdate as TemplateUpdateSchema
 from src.impl.Template.schema import TemplateGet as TemplateGetSchema
 from src.impl.Template.schema import TemplateGetAll as TemplateGetAllSchema
+from src.impl.Template.schema import TemplateUpdate as TemplateUpdateSchema
 from src.impl.Template.service import TemplateService
 
 router = APIRouter(
-    prefix="/emplate",
+    prefix="/template",
     tags=["template"],
 )
 
@@ -19,7 +20,8 @@ def get_all():
     return template_service.get_all()
 
 
-@router.get("/{id}", response_model=TemplateGetSchema)
+@router.get("/{id}")
+# , response_model=TemplateGetSchema)
 def get(id: int):
     return template_service.get_by_id(id)
 

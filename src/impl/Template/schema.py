@@ -1,20 +1,23 @@
 
 from datetime import date
-from pydantic import BaseModel, ValidationError, validator
 from typing import List, Optional
+
+from pydantic import BaseModel, ValidationError, validator
 
 from src.utils.Base.BaseSchema import BaseSchema
 
 
 class TemplateGet(BaseSchema):
+    id:int
     name: str
     description: str
     html: str
     created_date: date
-
+    internal: bool
+    fields: List[str]
+    common_fields: List[str]
 
 class TemplateGetAll(TemplateGet):
-    id: int
     creator_id: int
     is_active: bool
 
