@@ -53,4 +53,3 @@ class TemplateService(BaseService):
         db.session.commit()
         db.session.refresh(db_obj)
         return db_obj
-

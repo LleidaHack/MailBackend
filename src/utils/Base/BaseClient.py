@@ -22,6 +22,7 @@ class BaseClient():
                 if getattr(s, cli.name) is None:
                     setattr(s, cli.name, cli())
                 return f(*args)
+
             return get_client
 
         return wrapper

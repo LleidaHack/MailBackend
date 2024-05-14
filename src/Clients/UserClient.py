@@ -12,7 +12,9 @@ from src.utils.Base.BaseClient import BaseClient
 class UserClient(BaseClient):
     name = 'user_client'
 
-    def __init__(self, url=Configuration.client.url, token=Configuration.client.service_token) -> Any:
+    def __init__(self,
+                 url=Configuration.client.url,
+                 token=Configuration.client.service_token) -> Any:
         # super().__init__(url, token)
         pass
 

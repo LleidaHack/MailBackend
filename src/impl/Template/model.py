@@ -19,7 +19,6 @@ class Template(Base):
     is_active = Column(Boolean, default=True)
     internal = Column(Boolean, default=False)
 
-
     @orm.reconstructor
     def init_on_load(self):
         self.__template = TemplateUtil(self.html)
@@ -27,14 +26,17 @@ class Template(Base):
     @property
     def fields(self):
         return [_ for _ in self.__template.get_identifiers() if _[0] != '_']
-    
+
     @property
     def common_fields(self) -> List[str]:
         return [_ for _ in self.__template.get_identifiers() if _[0] == '_']
 
     @property
     def common_values(self):
-        return {_.name:_.value for _ in CommonFields if _.name in self.common_fields}
+        return {
+            _.name: _.value
+            for _ in CommonFields if _.name in self.common_fields
+        }
 
     def to_html(self, values: List[str]) -> str:
         if not len(self.fields) == len(values):

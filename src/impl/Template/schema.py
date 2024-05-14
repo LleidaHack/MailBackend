@@ -7,7 +7,7 @@ from src.utils.Base.BaseSchema import BaseSchema
 
 
 class TemplateGet(BaseSchema):
-    id:int
+    id: int
     name: str
     description: str
     html: str
@@ -15,6 +15,7 @@ class TemplateGet(BaseSchema):
     internal: bool
     fields: List[str]
     common_fields: List[str]
+
 
 class TemplateGetAll(TemplateGet):
     creator_id: int
