@@ -2,6 +2,7 @@ from enum import Enum
 
 from src.configuration.Configuration import Configuration
 
+
 class CommonFields(Enum):
     _front_link = Configuration.front_url
     _back_link = Configuration.back_url

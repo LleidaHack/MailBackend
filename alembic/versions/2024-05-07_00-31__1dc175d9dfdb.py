@@ -11,7 +11,6 @@ from src.configuration.Configuration import Configuration
 from os.path import join
 from src.utils.internal_templates.InternalTemplates import InternalTemplates
 
-
 # revision identifiers, used by Alembic.
 revision = '1dc175d9dfdb'
 down_revision = '386edb3fbafa'
@@ -26,8 +25,11 @@ def upgrade():
         template_file_path = join(path, f"{_.value}.html")
         with open(template_file_path, 'r') as file:
             html = file.read().replace("\'", '\'\'')
-            op.execute('INSERT INTO Template(creator_id, name, description, html, created_date, is_active, internal) ' + 
-                        f"VALUES(0, '{_.value}', '{_.value}', E'{html}', {sa.func.current_date()}, {True}, {True})")
+            op.execute(
+                'INSERT INTO Template(creator_id, name, description, html, created_date, is_active, internal) '
+                +
+                f"VALUES(0, '{_.value}', '{_.value}', E'{html}', {sa.func.current_date()}, {True}, {True})"
+            )
     # ### end Alembic commands ###
 
 
@@ -36,4 +38,3 @@ def downgrade():
     for _ in InternalTemplates:
         op.execute(f"DELETE FROM Template WHERE name = '{_.value}'")
     # ### end Alembic commands ###
-

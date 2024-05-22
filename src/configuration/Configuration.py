@@ -55,4 +55,5 @@ class Configuration:
                 else:
                     setattr(Configuration, k, v)
 
+
 Configuration()

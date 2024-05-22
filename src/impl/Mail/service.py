@@ -18,6 +18,7 @@ from src.utils.Base.BaseClient import BaseClient
 class MailService(BaseService):
     name = 'mail_service'
     user_client = None
+
     def get_all(self):
         mail = db.session.query(MailModel).all()
         return mail
@@ -27,7 +28,7 @@ class MailService(BaseService):
         if mail is None:
             raise Exception()
         return mail
-    
+
     # @BaseClient.needs_client(UserClient)
     def create(self, payload: MailCreateSchema):
         mail = MailModel(**payload.dict(), sent=False)
@@ -82,12 +83,16 @@ class MailService(BaseService):
                           Configuration.mail.port) as server:
                 server.login(Configuration.mail.username,
                              Configuration.mail.password)
-                html = MIMEText(mail.template.to_html(mail.fields.replace(' ', '').split(',')), 'html')
+                html = MIMEText(
+                    mail.template.to_html(
+                        mail.fields.replace(' ', '').split(',')), 'html')
                 msg.attach(html)
                 if Configuration.mail.send_mails:
                     # server.sendmail(Configuration.mail.from_mail, [user.email],
-                    server.sendmail(Configuration.mail.from_mail, [mail.receiver_mail.replace(' ', '').split(',')],
-                                    msg.as_string())
+                    server.sendmail(
+                        Configuration.mail.from_mail,
+                        [mail.receiver_mail.replace(' ', '').split(',')],
+                        msg.as_string())
                 else:
                     print(
                         'Mail sending is disabled i you really want to send mails enable it in the config'
