@@ -4,11 +4,11 @@ from string import Template as TemplateUtil
 from typing import List
 from sqlalchemy import Boolean, Column, Date, Integer, String, func, orm
 
-from src.utils.database import Base
+from src.utils.Base.BaseModel import BaseModel
 from src.utils.CommonFields import CommonFields
 
 
-class Template(Base):
+class Template(BaseModel):
     __tablename__ = 'template'
     id: int = Column(Integer, primary_key=True, index=True)
     creator_id: int = Column(Integer, nullable=False)

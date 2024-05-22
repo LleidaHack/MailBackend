@@ -7,10 +7,10 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
 from src.impl.Template.model import Template as TemplateModel
-from src.utils.database import Base
+from src.utils.Base.BaseModel import BaseModel
 
 
-class Mail(Base):
+class Mail(BaseModel):
     __tablename__ = 'mail'
     id: int = Column(Integer, primary_key=True, index=True)
     ##reciver_id = Column(Integer, nullable=True, unique=True)

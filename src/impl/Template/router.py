@@ -21,7 +21,7 @@ def get_all():
     return template_service.get_all()
 
 
-@router.get("/{id}")
+@router.get("/{id}", response_model=TemplateGetSchema)
 # , response_model=TemplateGetSchema)
 def get(id: int):
     return template_service.get_by_id(id)

@@ -8,3 +8,4 @@ fastapi-mail
 httpx
 uvicorn
 openapi-python-client
+PyYAML
