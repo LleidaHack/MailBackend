@@ -1,10 +1,8 @@
 from fastapi import FastAPI
-from fastapi.staticfiles import StaticFiles
 from fastapi_sqlalchemy import DBSessionMiddleware
 from fastapi.middleware.cors import CORSMiddleware
 
 from src.configuration.Configuration import Configuration
-from src.impl.Template.service import TemplateService
 from src.versions.v1 import router as v1_router
 
 tags_metadata = {}
