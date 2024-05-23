@@ -27,6 +27,5 @@ app.add_middleware(
     expose_headers=["*"],
 )
 
-
 app.add_middleware(DBSessionMiddleware, db_url=Configuration.database.url)
 app.include_router(v1_router)
