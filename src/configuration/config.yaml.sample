@@ -1,0 +1,19 @@
+front_url: url
+back_url: url
+static_folder: static
+contact_mail: contact_mail
+client:
+  url: http://localhost:8000
+  service_token: TOKEN
+
+database:
+  url: url
+
+mail:
+  username: username
+  password: pass
+  from_mail: mail
+  port: port
+  server: server
+  from_name: name
+  send_mails: False
