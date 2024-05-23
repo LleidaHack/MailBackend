@@ -21,7 +21,9 @@ app = FastAPI(title="LleidaHack Mail API",
               openapi_tags=tags_metadata,
               debug=True)
 
-app.mount(f'/{Configuration.static_folder}', StaticFiles(directory=Configuration.static_folder),name=Configuration.static_folder)
+app.mount(f'/{Configuration.static_folder}',
+          StaticFiles(directory=Configuration.static_folder),
+          name=Configuration.static_folder)
 # app.add_middleware(
 #     CORSMiddleware,
 #     allow_origins=["localhost:8000"],

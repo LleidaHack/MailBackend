@@ -80,15 +80,15 @@ class MailService(BaseService):
         msg['To'] = mail.receiver_mail
         try:
             html = MIMEText(
-                mail.template.to_html(
-                    mail.fields.replace(' ', '').split(',')), 'html')
+                mail.template.to_html(mail.fields.replace(' ', '').split(',')),
+                'html')
             msg.attach(html)
             if Configuration.mail.send_mails:
                 # server.sendmail(Configuration.mail.from_mail, [user.email],
                 with SMTP_SSL(Configuration.mail.server,
-                            Configuration.mail.port) as server:
+                              Configuration.mail.port) as server:
                     server.login(Configuration.mail.username,
-                                Configuration.mail.password)
+                                 Configuration.mail.password)
                     server.sendmail(
                         Configuration.mail.from_mail,
                         [mail.receiver_mail.replace(' ', '').split(',')],
@@ -100,5 +100,5 @@ class MailService(BaseService):
         except Exception as e:
             raise e
             raise HTTPException(status_code=500, detail=str(e))
-    
+
     # def real_send_api():
