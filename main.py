@@ -1,14 +1,11 @@
-import argparse
-from os import path
-
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi_sqlalchemy import DBSessionMiddleware
+from fastapi.middleware.cors import CORSMiddleware
 
 from src.configuration.Configuration import Configuration
 from src.impl.Template.service import TemplateService
-from src.impl.versions.v1 import router as v1_router
-from src.versions.v1 import router
+from src.versions.v1 import router as v1_router
 
 tags_metadata = {}
 print(__name__)
@@ -21,17 +18,14 @@ app = FastAPI(title="LleidaHack Mail API",
               openapi_tags=tags_metadata,
               debug=True)
 
-app.mount(f'/{Configuration.static_folder}',
-          StaticFiles(directory=Configuration.static_folder),
-          name=Configuration.static_folder)
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=["localhost:8000"],
-#     allow_credentials=True,
-#     allow_methods=["*"],
-#     allow_headers=["*"],
-#     expose_headers=["*"],
-# )
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["localhost:8000"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+    expose_headers=["*"],
+)
 
 app.add_middleware(DBSessionMiddleware, db_url=Configuration.database.url)
 app.include_router(v1_router)
