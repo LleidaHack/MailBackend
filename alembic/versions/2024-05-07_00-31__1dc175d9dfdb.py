@@ -5,10 +5,12 @@ Revises: 386edb3fbafa
 Create Date: 2024-05-07 00:31:08.781774
 
 """
-from alembic import op
-import sqlalchemy as sa
-from src.configuration.Configuration import Configuration
 from os.path import join
+
+import sqlalchemy as sa
+
+from alembic import op
+from src.configuration.Configuration import Configuration
 from src.utils.internal_templates.InternalTemplates import InternalTemplates
 
 # revision identifiers, used by Alembic.
@@ -23,7 +25,7 @@ def upgrade():
     path = join(*Configuration.initial_templates_path.split(','))
     for _ in InternalTemplates:
         template_file_path = join(path, f"{_.value}.html")
-        with open(template_file_path, 'r') as file:
+        with open(template_file_path, 'r', encoding='utf-8') as file:
             html = file.read().replace("\'", '\'\'')
             op.execute(
                 'INSERT INTO Template(creator_id, name, description, html, created_date, is_active, internal) '

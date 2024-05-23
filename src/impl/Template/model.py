@@ -2,6 +2,7 @@ from datetime import date
 # from generated_src.lleida_hack_api_client.models.user_get_all import UserGetAll
 from string import Template as TemplateUtil
 from typing import List
+
 from sqlalchemy import Boolean, Column, Date, Integer, String, func, orm
 
 from src.utils.Base.BaseModel import BaseModel

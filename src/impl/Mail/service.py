@@ -6,13 +6,13 @@ from fastapi import HTTPException
 from fastapi_sqlalchemy import db
 from sqlalchemy import asc, desc
 
-from src.Clients.UserClient import UserClient
+# from src.Clients.UserClient import UserClient
 from src.configuration.Configuration import Configuration
 from src.impl.Mail.model import Mail as MailModel
 from src.impl.Mail.schema import MailCreate as MailCreateSchema
+from src.utils.Base.BaseClient import BaseClient
 from src.utils.Base.BaseService import BaseService
 from src.utils.service_utils import set_existing_data
-from src.utils.Base.BaseClient import BaseClient
 
 
 class MailService(BaseService):
@@ -79,24 +79,26 @@ class MailService(BaseService):
         msg['From'] = Configuration.mail.from_mail
         msg['To'] = mail.receiver_mail
         try:
-            with SMTP_SSL(Configuration.mail.server,
-                          Configuration.mail.port) as server:
-                server.login(Configuration.mail.username,
-                             Configuration.mail.password)
-                html = MIMEText(
-                    mail.template.to_html(
-                        mail.fields.replace(' ', '').split(',')), 'html')
-                msg.attach(html)
-                if Configuration.mail.send_mails:
-                    # server.sendmail(Configuration.mail.from_mail, [user.email],
+            html = MIMEText(
+                mail.template.to_html(
+                    mail.fields.replace(' ', '').split(',')), 'html')
+            msg.attach(html)
+            if Configuration.mail.send_mails:
+                # server.sendmail(Configuration.mail.from_mail, [user.email],
+                with SMTP_SSL(Configuration.mail.server,
+                            Configuration.mail.port) as server:
+                    server.login(Configuration.mail.username,
+                                Configuration.mail.password)
                     server.sendmail(
                         Configuration.mail.from_mail,
                         [mail.receiver_mail.replace(' ', '').split(',')],
                         msg.as_string())
-                else:
-                    print(
-                        'Mail sending is disabled i you really want to send mails enable it in the config'
-                    )
+            else:
+                print(
+                    'Mail sending is disabled i you really want to send mails enable it in the config'
+                )
         except Exception as e:
             raise e
             raise HTTPException(status_code=500, detail=str(e))
+    
+    # def real_send_api():
