@@ -20,7 +20,7 @@ class Mail(BaseModel):
     reciver_id = Column(String, nullable=False, default=0)  # separated by ,
     template_id: int = Column(Integer, ForeignKey('template.id'))
     subject = Column(String)
-    receiver_mail = Column(String)  # separated by ,
+    reciver_mail = Column(String)  # separated by ,
     fields = Column(String)  ##TODO: Hauria de ser un json (@ton)
     sent = Column(Boolean, default=False)
     template: TemplateModel = relationship(TemplateModel)
