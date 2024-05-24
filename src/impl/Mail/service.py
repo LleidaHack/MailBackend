@@ -10,7 +10,7 @@ from sqlalchemy import asc, desc
 from src.configuration.Configuration import Configuration
 from src.impl.Mail.model import Mail as MailModel
 from src.impl.Mail.schema import MailCreate as MailCreateSchema
-from src.utils.Base.BaseClient import BaseClient
+# from src.utils.Base.BaseClient import BaseClient
 from src.utils.Base.BaseService import BaseService
 from src.utils.service_utils import set_existing_data
 
