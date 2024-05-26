@@ -28,8 +28,6 @@ app.add_middleware(
 app.add_middleware(DBSessionMiddleware, db_url=Configuration.database.url)
 app.include_router(v1_router)
 
-
-
 for route in app.routes:
     if isinstance(route, APIRoute):
         route.operation_id = route.tags[-1].replace(' ', '').lower() if len(
