@@ -29,6 +29,7 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}
           password: ${{ secrets.SERVER_PASSWORD }}
           script: |
+            set -e
             cd ${{ secrets.PROJECT_PATH }}/${{ steps.extract_branch.outputs.branch }}
             git fetch
             git checkout ${{ steps.extract_branch.outputs.branch }}
