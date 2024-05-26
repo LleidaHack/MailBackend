@@ -37,7 +37,7 @@ jobs:
             echo > logs/gunicorn_access.log
             echo > logs/gunicorn_error.log
             echo "${{ steps.date.outputs.date }}  ->  ${{ github.actor }}" >> deploy.log
-            poetry install --sync
-            poetry run alembic upgrade head
+            ${{ secrets.POETRY_BIN }} install --sync
+            ${{ secrets.POETRY_BIN }} run alembic upgrade head
             sudo systemctl restart MailBackend.${{ steps.extract_branch.outputs.branch }}
             systemctl status MailBackend.${{ steps.extract_branch.outputs.branch }}.service
