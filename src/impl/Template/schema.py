@@ -10,7 +10,6 @@ class TemplateGet(BaseSchema):
     id: int
     name: str
     description: str
-    html: str
     created_date: date
     internal: bool
     fields: List[str]

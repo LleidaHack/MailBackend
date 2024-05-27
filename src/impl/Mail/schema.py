@@ -10,7 +10,7 @@ class MailGet(BaseSchema):
     reciver_id: str  #a list of int separated by ,
     template_id: int
     subject: str
-    receiver_mail: Optional[str]  #a list of int separated by ,
+    reciver_mail: Optional[str]  #a list of int separated by ,
     # html: str
     fields: str  ##TODO: Hauria de ser un json (@ton)
     sent: bool
@@ -26,7 +26,7 @@ class MailCreate(BaseSchema):
     reciver_id: Optional[str] = ''  #a list of int separated by ,
     template_id: int
     subject: str
-    receiver_mail: Optional[str] = ''  #a list of int separated by ,
+    reciver_mail: Optional[str] = ''  #a list of int separated by ,
     # html: str
     fields: str  ##TODO: Hauria de ser un json (@ton)
 

@@ -20,6 +20,13 @@ class TemplateService(BaseService):
             raise HTTPException(status_code=404, detail="Template not found")
         return template
 
+    def get_by_name(self, name) -> ModelTemplate:
+        template = db.session.query(ModelTemplate).filter(
+            ModelTemplate.name == name).first()
+        if not template:
+            raise HTTPException(status_code=404, detail="Template not found")
+        return template
+
     def create(self, template: TemplateCreate):
         db_template = ModelTemplate(**template.dict())
         db.session.add(db_template)

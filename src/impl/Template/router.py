@@ -27,6 +27,12 @@ def get(id: int):
     return template_service.get_by_id(id)
 
 
+@router.get("/name/{name}", response_model=TemplateGetSchema)
+# , response_model=TemplateGetSchema)
+def get_by_name(name: str):
+    return template_service.get_by_name(name)
+
+
 @router.put("/{id}")
 def update(id: int, payload: TemplateUpdateSchema):
     return template_service.update(id, payload)

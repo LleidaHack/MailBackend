@@ -36,7 +36,7 @@ def update(id: int, payload: MailUpdateSchema):
 
 
 @router.put("/send/{id}")
-def send_by_id(id: int):
+async def send_by_id(id: int):
     return mail_service.send_by_id(id)
 
 

@@ -10,7 +10,7 @@ from sqlalchemy import asc, desc
 from src.configuration.Configuration import Configuration
 from src.impl.Mail.model import Mail as MailModel
 from src.impl.Mail.schema import MailCreate as MailCreateSchema
-from src.utils.Base.BaseClient import BaseClient
+# from src.utils.Base.BaseClient import BaseClient
 from src.utils.Base.BaseService import BaseService
 from src.utils.service_utils import set_existing_data
 
@@ -77,7 +77,7 @@ class MailService(BaseService):
         msg = MIMEMultipart('related')
         msg['Subject'] = mail.subject
         msg['From'] = Configuration.mail.from_mail
-        msg['To'] = mail.receiver_mail
+        msg['To'] = mail.reciver_mail
         try:
             html = MIMEText(
                 mail.template.to_html(mail.fields.replace(' ', '').split(',')),
@@ -91,7 +91,7 @@ class MailService(BaseService):
                                  Configuration.mail.password)
                     server.sendmail(
                         Configuration.mail.from_mail,
-                        [mail.receiver_mail.replace(' ', '').split(',')],
+                        [mail.reciver_mail.replace(' ', '').split(',')],
                         msg.as_string())
             else:
                 print(

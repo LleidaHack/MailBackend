@@ -36,7 +36,7 @@ def upgrade():
         sa.Column('reciver_id', sa.String(), nullable=False),
         sa.Column('template_id', sa.Integer(), nullable=True),
         sa.Column('subject', sa.String(), nullable=True),
-        sa.Column('receiver_mail', sa.String(), nullable=True),
+        sa.Column('reciver_mail', sa.String(), nullable=True),
         sa.Column('fields', sa.String(), nullable=True),
         sa.Column('sent', sa.Boolean(), nullable=True),
         sa.Column('priority', sa.Integer(), nullable=True),
