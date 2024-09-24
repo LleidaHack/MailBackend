@@ -33,7 +33,7 @@ class MailService(BaseService):
     def create(self, payload: MailCreateSchema):
         mail = MailModel(**payload.dict(), sent=False)
         db.session.add(mail)
-        # self.user_client.get_by_id(mail.reciver_id)
+        # self.user_client.get_by_id(mail.receiver_id)
         # self.user_client.get_by_id(mail.sender_id)
         db.session.commit()
         return mail
@@ -77,7 +77,7 @@ class MailService(BaseService):
         msg = MIMEMultipart('related')
         msg['Subject'] = mail.subject
         msg['From'] = Configuration.mail.from_mail
-        msg['To'] = mail.reciver_mail
+        msg['To'] = mail.receiver_mail
         try:
             html = MIMEText(
                 mail.template.to_html(mail.fields.replace(' ', '').split(',')),
@@ -91,7 +91,7 @@ class MailService(BaseService):
                                  Configuration.mail.password)
                     server.sendmail(
                         Configuration.mail.from_mail,
-                        [mail.reciver_mail.replace(' ', '').split(',')],
+                        [mail.receiver_mail.replace(' ', '').split(',')],
                         msg.as_string())
             else:
                 print(
