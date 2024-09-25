@@ -57,7 +57,9 @@ class Configuration:
         Configuration.__CONFIG_FILES = None
         # Clear dynamically created attributes
         for key in list(Configuration.__dict__.keys()):
-            if not key.startswith('_'):  # Don't delete protected/private attributes
+            if not key.startswith(
+                    '_'):  # Don't delete protected/private attributes
                 delattr(Configuration, key)
+
 
 Configuration()
