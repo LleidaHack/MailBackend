@@ -19,7 +19,7 @@
             min-height: 250px;
             text-align: center;
             color: white;
-            background-image: url('$_static_folder/fondo_verd_8.png');
+            background-image: url('$_static_folder/banner.png');
             background-size: cover;
             background-position: center;
             position: relative; 
@@ -92,13 +92,13 @@
             <p>Felicitats <b>$name</b>!</p>
             <p>La teva inscripció a la <b>$event_name</b> ha estat acceptada!</p>
             <p>Si us plau, <b>confirma la teva assistència en $days_left dies a partir de rebre aquest correu</b>. Sinó, la teva plaça serà assignada a un altre hacker. </p>
-            <a href="$_back_link/eventmanagment/confirm-assistance?token=$token">
+            <a href="$_front_link/hackeps/assistance?confirm=true&token=$token">
                 <div class="button">
                     <b>Confirmar assistència</b>
                 </div>
             </a>
             <p>Si finalment no pots assistir, avisa'ns clicant al botó de <b>cancelar</b>.</p>
-            <a href="$_front_link/eventmanagment/cancel-assistance?token=$token">
+            <a href="$__front_link/hackeps/assistance?confirm=false&token=$token">
                 <div class="button">
                     <b>Cancelar</b>
                 </div>
