@@ -79,9 +79,8 @@ class MailService(BaseService):
         msg['From'] = Configuration.mail.from_mail
         msg['To'] = mail.receiver_mail
         try:
-            html = MIMEText(
-                mail.template.to_html(mail.fields.split(',')),
-                'html')
+            html = MIMEText(mail.template.to_html(mail.fields.split(',')),
+                            'html')
             msg.attach(html)
             if Configuration.mail.send_mails:
                 # server.sendmail(Configuration.mail.from_mail, [user.email],
