@@ -66,9 +66,9 @@ class MailService(BaseService):
                 MailModel.priority)).order_by(asc(
                     MailModel.creation_date)).first()
         if mail is None:
-            raise Exception()
+            raise Exception("no more mails avaliable")
         if mail.sent:
-            Exception()
+            raise Exception("suposadament no possible")
         self.real_send(mail)
         self.set_sent(mail)
 
