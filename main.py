@@ -41,7 +41,6 @@ for route in app.routes:
         route.operation_id += '_' + route.name
 
 
-
 @app.on_event("startup")
 @repeat_every(seconds=60 * 60 * 24)
 def send_pending_mails():
