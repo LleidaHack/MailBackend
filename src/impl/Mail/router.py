@@ -1,6 +1,8 @@
 from typing import List
 
 from fastapi import APIRouter
+from fastapi_utils.tasks import repeat_at
+from asyncio import sleep
 
 from src.impl.Mail.schema import MailCreate as MailCreateSchema
 from src.impl.Mail.schema import MailGet as MailGetSchema
@@ -43,3 +45,13 @@ async def send_by_id(id: int):
 @router.put("/send/next")
 def send_next_mail():
     return mail_service.send_next()
+
+
+@repeat_at(cron="0 0 * * *")
+def send_pending_mails():
+    while True:
+        try:
+            mail_service.send_next()
+            sleep(60)
+        except Exception:
+            break
