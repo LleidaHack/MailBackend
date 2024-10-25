@@ -3,8 +3,14 @@ from fastapi.routing import APIRoute
 from fastapi_sqlalchemy import DBSessionMiddleware
 from fastapi.middleware.cors import CORSMiddleware
 
+from fastapi_utils.tasks import repeat_every
+from asyncio import sleep
+
+from src.impl.Mail.service import MailService
 from src.configuration.Configuration import Configuration
 from src.versions.v1 import router as v1_router
+
+mail_service = MailService()
 
 tags_metadata = {}
 app = FastAPI(title="LleidaHack Mail API",
@@ -33,3 +39,15 @@ for route in app.routes:
         route.operation_id = route.tags[-1].replace(' ', '').lower() if len(
             route.tags) > 0 else ''
         route.operation_id += '_' + route.name
+
+
+
+@app.on_event("startup")
+@repeat_every(seconds=60 * 60 * 24)
+def send_pending_mails():
+    while True:
+        try:
+            mail_service.send_next()
+            sleep(60)
+        except Exception:
+            break
