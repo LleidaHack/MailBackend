@@ -22,14 +22,6 @@ app = FastAPI(title="LleidaHack Mail API",
               openapi_tags=tags_metadata,
               debug=True)
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["localhost:8000"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-    expose_headers=["*"],
-)
 
 app.add_middleware(DBSessionMiddleware, db_url=Configuration.database.url)
 app.include_router(v1_router)
