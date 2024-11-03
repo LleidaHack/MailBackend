@@ -1,6 +1,6 @@
 from multiprocessing import cpu_count
 
-from configuration import Configuration
+from src.configuration.Configuration import Configuration
 
 #socket path
 bind = f"localhost:{Configuration.port}"
