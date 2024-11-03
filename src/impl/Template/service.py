@@ -71,9 +71,9 @@ class TemplateService(BaseService):
         for _ in InternalTemplates:
             template_file_path = join(path, f"{_.value}.html")
             with open(template_file_path, 'r', encoding='utf-8') as file:
-                n_html =file.read().replace("\'", '\'\'')
+                n_html = file.read().replace("\'", '\'\'')
                 t = self.get_by_name(_.value)
-                if not t.html == n_html: 
+                if not t.html == n_html:
                     t.html = n_html
                     updated.append(t)
         db.session.commit()
