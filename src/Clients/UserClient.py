@@ -5,6 +5,7 @@ from generated_src.lleida_hack_api_client.api.user import get_user, get_users
 from generated_src.lleida_hack_api_client.models.user_get import UserGet
 from generated_src.lleida_hack_api_client.models.user_get_all import UserGetAll
 from generated_src.lleida_hack_api_client.types import Response
+
 from src.configuration.Configuration import Configuration
 from src.utils.Base.BaseClient import BaseClient
 
