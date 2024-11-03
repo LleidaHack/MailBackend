@@ -34,12 +34,12 @@ def create(payload: MailCreateSchema):
 def update(id: int, payload: MailUpdateSchema):
     return mail_service.update(id, payload)
 
+
 @router.get("/send_next/")
 def send_next_mail():
     return mail_service.send_next()
 
+
 @router.put("/send/{id}")
 async def send_by_id(id: int):
     return mail_service.send_by_id(id)
-
-
