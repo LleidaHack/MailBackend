@@ -41,7 +41,7 @@ class Template(BaseModel):
 
     def to_html(self, values: List[str]) -> str:
         if not len(self.fields) == len(values):
-            raise Exception()
+            raise Exception(f'fields:{self.fields}  \n  values:{values}')
         data = dict(zip(self.fields, values))
         data.update(self.common_values)
         return self.__template.substitute(data)
