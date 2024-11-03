@@ -40,7 +40,7 @@ class Template(BaseModel):
         }
 
     def to_html(self, values: List[str]) -> str:
-        values[len(self.fields)-1] = ','.join(values[len(self.fields)-1:])
+        values[len(self.fields) - 1] = ','.join(values[len(self.fields) - 1:])
         raise Exception(f'fields:{self.fields}  \n  values:{values}')
         # if not len(self.fields) == len(values):
         #     raise Exception(f'fields:{self.fields}  \n  values:{values}')
