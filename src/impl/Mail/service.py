@@ -80,7 +80,7 @@ class MailService(BaseService):
         msg['To'] = mail.receiver_mail
         try:
             # html = MIMEText(mail.template.to_html(mail.fields.split(',')),
-            html = MIMEText(mail.template.to_html(mail),
+            html = MIMEText(mail.template.to_html(mail.fields),
                             'html')
             msg.attach(html)
             if Configuration.mail.send_mails:
