@@ -61,7 +61,7 @@ class MailService(BaseService):
         return r
 
     def send_next(self):
-        mail = db.session.session.query(MailModel).filter(
+        mail = db.session.query(MailModel).filter(
             MailModel.sent == False).order_by(desc(
                 MailModel.priority)).order_by(asc(
                     MailModel.creation_date)).first()
