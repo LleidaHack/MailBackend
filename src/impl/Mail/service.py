@@ -88,13 +88,11 @@ class MailService(BaseService):
     def clear_mail_queue(self):
         mails = db.session.query(MailModel).filter(
             MailModel.sent == False).order_by(desc(
-                MailModel.priority)).order_by(asc(
-                    MailModel.creation_date))
+                MailModel.priority)).order_by(asc(MailModel.creation_date))
         if mails == []:
             raise Exception("no more mails avaliable")
         for mail in mails:
             self.set_sent(mail)
-
 
     def real_send(self, mail: MailModel):
         # u = self.user_client.get_by_id(mail.sender_id)

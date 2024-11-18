@@ -75,7 +75,11 @@ class TemplateService(BaseService):
                 try:
                     t = self.get_by_name(_.value)
                 except:
-                    t = self.create(TemplateCreate(name=_, description=_, html=n_html, creator_id=0))
+                    t = self.create(
+                        TemplateCreate(name=_,
+                                       description=_,
+                                       html=n_html,
+                                       creator_id=0))
                 if not t.html == n_html:
                     t.html = n_html
                     updated.append(t)
