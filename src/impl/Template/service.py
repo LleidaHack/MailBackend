@@ -72,7 +72,10 @@ class TemplateService(BaseService):
             template_file_path = join(path, f"{_.value}.html")
             with open(template_file_path, 'r', encoding='utf-8') as file:
                 n_html = file.read().replace("\"", '\'')
-                t = self.get_by_name(_.value)
+                try:
+                    t = self.get_by_name(_.value)
+                except:
+                    t = self.create(TemplateCreate(name=_, description=_, html=n_html, creator_id=0))
                 if not t.html == n_html:
                     t.html = n_html
                     updated.append(t)

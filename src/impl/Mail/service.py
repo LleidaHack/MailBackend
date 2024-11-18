@@ -72,6 +72,30 @@ class MailService(BaseService):
         self.real_send(mail)
         self.set_sent(mail)
 
+    def clear_next_mail(self):
+        print("HOLA")
+        mail = db.session.query(MailModel).filter(
+            MailModel.sent == False).order_by(desc(
+                MailModel.priority)).order_by(asc(
+                    MailModel.creation_date)).first()
+        print(mail)
+        if mail is None:
+            raise Exception("no more mails avaliable")
+        if mail.sent:
+            raise Exception("suposadament no possible")
+        self.set_sent(mail)
+
+    def clear_mail_queue(self):
+        mails = db.session.query(MailModel).filter(
+            MailModel.sent == False).order_by(desc(
+                MailModel.priority)).order_by(asc(
+                    MailModel.creation_date))
+        if mails == []:
+            raise Exception("no more mails avaliable")
+        for mail in mails:
+            self.set_sent(mail)
+
+
     def real_send(self, mail: MailModel):
         # u = self.user_client.get_by_id(mail.sender_id)
         msg = MIMEMultipart('related')
