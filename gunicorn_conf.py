@@ -1,9 +1,7 @@
 from multiprocessing import cpu_count
 
-from src.configuration.Configuration import Configuration
-
 #socket path
-bind = f"localhost:{Configuration.port}"
+bind = "0.0.0.0:8001"
 
 #worker options
 workers = cpu_count() + 1

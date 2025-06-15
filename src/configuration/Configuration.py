@@ -25,10 +25,17 @@ class Configuration:
         if Configuration._FILE is None:
             Configuration.__CONFIG_FILES = Configuration.__get_yaml_files()
             if file is None:
-                if len(Configuration.__CONFIG_FILES) > 1:
+                # Check environment variable for config selection
+                env = os.environ.get('ENV', 'main')
+                config_file = f'config.{env}.yaml'
+                
+                if config_file in Configuration.__CONFIG_FILES:
+                    file = config_file
+                elif len(Configuration.__CONFIG_FILES) == 1:
+                    file = Configuration.__CONFIG_FILES[0]
+                else:
                     raise Exception(
-                        'Please select a configuration file to load')
-                file = Configuration.__CONFIG_FILES[0]
+                        f'Configuration file config.{env}.yaml not found. Available files: {Configuration.__CONFIG_FILES}')
             Configuration._FILE = os.path.join(Configuration.__CONFIG_PATH,
                                                file)
             self.__instanciate__()
