@@ -37,5 +37,5 @@ EXPOSE 8001
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
   CMD curl -f http://localhost:8001/health || exit 1
 
-# Run with gunicorn
-CMD ["sh", "-c", "uv run gunicorn main:app -c gunicorn_conf.py --bind 0.0.0.0:8001"]
+# Run migrations then start server
+CMD ["sh", "-c", "uv run alembic upgrade head && uv run gunicorn main:app -c gunicorn_conf.py --bind 0.0.0.0:8001"]

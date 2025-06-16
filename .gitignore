@@ -1,6 +1,11 @@
 config.ini
 src/configuration/*.yaml
 generated_src/**
+
+# Environment files with actual credentials
+.env.local
+.env.integration
+.env.production
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

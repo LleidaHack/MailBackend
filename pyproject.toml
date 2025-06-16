@@ -10,6 +10,7 @@ dependencies = [
     "openapi-python-client>=0.20.0",
     "fastapi>=0.111.0",
     "pydantic>=2.7.1",
+    "pydantic-settings>=2.0.0",
     "alembic>=1.13.1",
     "SQLAlchemy>=2.0.30",
     "FastAPI-SQLAlchemy>=0.2.1",
