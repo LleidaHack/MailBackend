@@ -9,6 +9,7 @@ ARG GIT_BRANCH
 RUN apt-get update && apt-get install -y \
     git \
     gcc \
+    curl \
     python3-dev \
     curl \
     && rm -rf /var/lib/apt/lists/*
