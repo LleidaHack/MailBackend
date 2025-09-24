@@ -20,7 +20,7 @@ RUN uv sync --frozen
 # Create required directories
 RUN mkdir -p logs generated_src
 
-EXPOSE 8000
+EXPOSE 8001
 
 # Default command (can be overridden in docker-compose.yml)
 CMD sh -c 'uv run alembic upgrade head && uv run gunicorn main:app -c gunicorn_conf.py'
