@@ -1,3 +1,4 @@
+import logging
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from smtplib import SMTP_SSL
@@ -14,6 +15,8 @@ from src.impl.Mail.schema import MailCreate as MailCreateSchema
 # from src.utils.Base.BaseClient import BaseClient
 from src.utils.Base.BaseService import BaseService
 from src.utils.service_utils import set_existing_data
+
+logger = logging.getLogger(__name__)
 
 
 class MailService(BaseService):
@@ -56,7 +59,7 @@ class MailService(BaseService):
     def send_by_id(self, id: int):
         mail = self.get_by_id(id)
         if mail.sent:
-            Exception('sent?')
+            raise Exception('sent?')
         r = self.real_send(mail)
         self.set_sent(mail)
         return r
@@ -111,13 +114,15 @@ class MailService(BaseService):
                               settings.mail.port) as server:
                     server.login(settings.mail.username,
                                  settings.mail.password)
+                    logger.info('Login successful, sending email to %s', mail.reciver_mail)
                     server.sendmail(
                         settings.mail.from_mail,
                         [mail.reciver_mail.replace(' ', '').split(',')],
                         msg.as_string())
+                    logger.info('sent')
             else:
-                print(
-                    'Mail sending is disabled i you really want to send mails enable it in the config'
+                logger.info(
+                    'Mail sending is disabled. To send emails, enable it in the config.'
                 )
         except Exception as e:
             raise e
