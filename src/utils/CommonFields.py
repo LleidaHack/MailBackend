@@ -1,6 +1,5 @@
 from enum import Enum
 
-
 from src.configuration.Settings import settings
 
 
