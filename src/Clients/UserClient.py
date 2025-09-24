@@ -5,7 +5,8 @@ from generated_src.lleida_hack_api_client.api.user import get_user, get_users
 from generated_src.lleida_hack_api_client.models.user_get import UserGet
 from generated_src.lleida_hack_api_client.models.user_get_all import UserGetAll
 from generated_src.lleida_hack_api_client.types import Response
-from src.configuration.Configuration import Configuration
+
+from src.configuration.Settings import settings
 from src.utils.Base.BaseClient import BaseClient
 
 
@@ -13,8 +14,8 @@ class UserClient(BaseClient):
     name = 'user_client'
 
     def __init__(self,
-                 url=Configuration.client.url,
-                 token=Configuration.client.service_token) -> Any:
+                 url=settings.client.url,
+                 token=settings.client.service_token) -> None:
         # super().__init__(url, token)
         pass
 

@@ -7,7 +7,8 @@ from fastapi_sqlalchemy import db
 from sqlalchemy import asc, desc
 
 # from src.Clients.UserClient import UserClient
-from src.configuration.Configuration import Configuration
+
+from src.configuration.Settings import settings
 from src.impl.Mail.model import Mail as MailModel
 from src.impl.Mail.schema import MailCreate as MailCreateSchema
 # from src.utils.Base.BaseClient import BaseClient
@@ -76,21 +77,21 @@ class MailService(BaseService):
         # u = self.user_client.get_by_id(mail.sender_id)
         msg = MIMEMultipart('related')
         msg['Subject'] = mail.subject
-        msg['From'] = Configuration.mail.from_mail
+        msg['From'] = settings.mail.from_mail
         msg['To'] = mail.reciver_mail
         try:
             html = MIMEText(
                 mail.template.to_html(mail.fields.replace(' ', '').split(',')),
                 'html')
             msg.attach(html)
-            if Configuration.mail.send_mails:
+            if settings.mail.send_mails:
                 # server.sendmail(Configuration.mail.from_mail, [user.email],
-                with SMTP_SSL(Configuration.mail.server,
-                              Configuration.mail.port) as server:
-                    server.login(Configuration.mail.username,
-                                 Configuration.mail.password)
+                with SMTP_SSL(settings.mail.server,
+                              settings.mail.port) as server:
+                    server.login(settings.mail.username,
+                                 settings.mail.password)
                     server.sendmail(
-                        Configuration.mail.from_mail,
+                        settings.mail.from_mail,
                         [mail.reciver_mail.replace(' ', '').split(',')],
                         msg.as_string())
             else:
