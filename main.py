@@ -6,7 +6,8 @@ from fastapi.routing import APIRoute
 from fastapi_sqlalchemy import DBSessionMiddleware
 from fastapi_utils.tasks import repeat_every
 
-from src.configuration.Configuration import Configuration
+
+from src.configuration.Settings import settings
 from src.impl.Mail.service import MailService
 from src.versions.v1 import router as v1_router
 
@@ -22,7 +23,7 @@ app = FastAPI(title="LleidaHack Mail API",
               openapi_tags=tags_metadata,
               debug=True)
 
-app.add_middleware(DBSessionMiddleware, db_url=Configuration.database.url)
+app.add_middleware(DBSessionMiddleware, db_url=settings.database.url)
 app.include_router(v1_router)
 
 for route in app.routes:
