@@ -5,18 +5,14 @@ import os
 
 
 class MailSettings(BaseSettings):
-    username: str = Field(
-        default="username", 
-        description="Mail service username",
-        env="MAIL__USERNAME"
-    )
-    password: str = Field(
-        default="password", 
-        description="Mail service password",
-        env="MAIL__PASSWORD"
-    )
+    username: str = Field(default="username",
+                          description="Mail service username",
+                          env="MAIL__USERNAME")
+    password: str = Field(default="password",
+                          description="Mail service password",
+                          env="MAIL__PASSWORD")
     from_mail: str = Field(
-        default="from@example.com", 
+        default="from@example.com",
         description="Email address used in the 'From' header",
         env="MAIL__FROM"
     )
@@ -39,66 +35,52 @@ class MailSettings(BaseSettings):
 
 
 class DatabaseSettings(BaseSettings):
-    url: str = Field(
-        ..., 
-        description="Database connection URL",
-        env="DATABASE__URL"
-    )
+    url: str = Field(...,
+                     description="Database connection URL",
+                     env="DATABASE__URL")
 
 
 class ClientSettings(BaseSettings):
-    url: str = Field(
-        ..., 
-        description="Mail service URL",
-        env="CLIENTS__MAIL_CLIENT__URL"
-    )
+    url: str = Field(...,
+                     description="Mail service URL",
+                     env="CLIENTS__MAIL_CLIENT__URL")
 
 
 class Settings(BaseSettings):
-    model_config = SettingsConfigDict(
-        env_file=".env",
-        env_file_encoding="utf-8",
-        env_nested_delimiter="__",
-        case_sensitive=False,
-        extra="allow"
-    )
-    
+    model_config = SettingsConfigDict(env_file=".env",
+                                      env_file_encoding="utf-8",
+                                      env_nested_delimiter="__",
+                                      case_sensitive=False,
+                                      extra="allow")
+
     # General settings
     front_url: str = Field(
         default="https://frontend.integration.lleidahack.dev/hackeps",
         description="Frontend URL",
-        env="FRONT_URL"
-    )
-    back_url: str = Field(
-        default="http://localhost:8000/", 
-        description="Backend URL",
-        env="BACK_URL"
-    )
-    static_folder: str = Field(
-        default="static",
-        description="Static files folder path",
-        env="STATIC_FOLDER"
-    )
-    contact_mail: str = Field(
-        default="contacte@lleidahack.dev",
-        description="Contact email address",
-        env="CONTACT_MAIL"
-    )
+        env="FRONT_URL")
+    back_url: str = Field(default="http://localhost:8000/",
+                          description="Backend URL",
+                          env="BACK_URL")
+    static_folder: str = Field(default="static",
+                               description="Static files folder path",
+                               env="STATIC_FOLDER")
+    contact_mail: str = Field(default="contacte@lleidahack.dev",
+                              description="Contact email address",
+                              env="CONTACT_MAIL")
     initial_templates_path: str = Field(
         default="src/templates/emails/initial.html",
         description="Path to the initial email template",
-        env="INITIAL_TEMPLATES_PATH"
-    )
-    
+        env="INITIAL_TEMPLATES_PATH")
+
     # Nested settings
     mail: MailSettings = Field(default_factory=MailSettings)
     database: DatabaseSettings
     clients: ClientSettings
-    
+
     def __init__(self, **kwargs):
         # Handle environment-specific defaults
         # env = os.environ.get('ENV', 'main')
-            
+
         super().__init__(**kwargs)
 
 
