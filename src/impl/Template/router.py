@@ -51,3 +51,8 @@ def activate(id: int):
 @router.put("/{id}/deactivate")
 def deactivate(id: int):
     return template_service.deactivate(id)
+
+
+@router.get('/update_templates/')
+def update_basic_templates():
+    return template_service.update_basic_templates()

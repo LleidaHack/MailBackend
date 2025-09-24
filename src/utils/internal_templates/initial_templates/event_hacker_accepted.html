@@ -1,12 +1,11 @@
 <html>
 <head>
     <style>
-        
         body {
             font-family: monospace;
             margin: 0;
             padding: 0;
-            background-color: #f5dca2;
+            background-color: #b0f5a2;
             font-size: 16px;
         }
 
@@ -20,7 +19,7 @@
             min-height: 250px;
             text-align: center;
             color: white;
-            background-image: url('$_static_folder/fondo_groc.png');
+            background-image: url('$_static_folder/banner.png');
             background-size: cover;
             background-position: center;
             position: relative; 
@@ -42,14 +41,13 @@
         .button {
             display: inline-block;
             padding: 10px 20px;
-            background-color: #EDAB11; 
+            background-color: #0E3A29; 
             color: white;
             text-decoration: none;
-            
         }
 
         .button:hover {
-            background-color: #7a5704; 
+            background-color: #071912; 
         }
 
         .button a {
@@ -76,7 +74,7 @@
 
         
         a {
-            color: #EDAB11; 
+            color: #0E3A29; 
             text-decoration: none;
         }
 
@@ -94,27 +92,29 @@
             <p>Felicitats <b>$name</b>!</p>
             <p>La teva inscripció a la <b>$event_name</b> ha estat acceptada!</p>
             <p>Si us plau, <b>confirma la teva assistència en $days_left dies a partir de rebre aquest correu</b>. Sinó, la teva plaça serà assignada a un altre hacker. </p>
-            
-            <div class="button">
-                <a href="$_back_link/eventmanagment/confirm-assistance?token=$token"><b>Confirmar assistència</b></a>
-            </div>
+            <a href="$_front_link/assistance?confirm=true&token=$token">
+                <div class="button">
+                    <b>Confirmar assistència</b>
+                </div>
+            </a>
             <p>Si finalment no pots assistir, avisa'ns clicant al botó de <b>cancelar</b>.</p>
-            <div class="button">
-                <a href="$_front_link/eventmanagment/cancel-assistance?token=$token"><b>Cancelar</b></a>
-            </div>
+            <a href="$_front_link/assistance?confirm=false&token=$token">
+                <div class="button">
+                    <b>Cancelar</b>
+                </div>
+            </a>
             <p>Si tens dubtes ens pots contactar a través de <a href="mailto:$_contact_mail">$_contact_mail</a>.</p>
-            <p>Esperem veure't a la HackEPS 2023!</p>
+            <p>Esperem veure't a la HackEPS 2024!</p>
             <p><b>Equip de LleidaHack</b></p>
             <br><br><br>
             <div class="social-icons-container">
-                <p>Si has rebut aquest correu és perquè t'has inscrit a la HackEPS 2023.</p>
+                <p>Si has rebut aquest correu és perquè t'has inscrit a la HackEPS 2024.</p>
                 <p>Si creus que és un error, si us plau envia'ns un correu a <a href="mailto:$_contact_mail">$_contact_mail</a></p>
                 <a href="https://twitter.com/hackeps"><img class="social-icon" src="$_static_folder/x_gris.png" alt="x"><a>
                 <a href="https://www.linkedin.com/company/hackeps/"><img class="social-icon" src="$_static_folder/linkedin_gris.png" alt="Linkedin"><a>
                 <a href="https://www.instagram.com/hackeps_/"><img class="social-icon" src="$_static_folder/instagram_gris.png" alt="Instagram"><a>
                 <a href="https://www.youtube.com/@LleidaHack"><img class="social-icon" src="$_static_folder/youtube_gris.png" alt="Youtube"><a>
                 <a href="https://www.twitch.tv/lleidahack"><img class="social-icon" src="$_static_folder/twitch_gris.png" alt="Twitch"><a>
-
             </div>
         </div>
     </div>

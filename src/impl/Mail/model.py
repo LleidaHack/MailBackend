@@ -13,14 +13,14 @@ from src.utils.Base.BaseModel import BaseModel
 class Mail(BaseModel):
     __tablename__ = 'mail'
     id: int = Column(Integer, primary_key=True, index=True)
-    ##reciver_id = Column(Integer, nullable=True, unique=True)
     creation_date = Column(DateTime, default=func.now())
     update_date = Column(DateTime, default=func.now())
     sender_id = Column(Integer, nullable=False, default=0)
-    reciver_id = Column(String, nullable=False, default=0)  # separated by ,
+    ##receiver_id = Column(Integer, nullable=True, unique=True)
+    receiver_id = Column(String, nullable=False, default=0)  # separated by ,
     template_id: int = Column(Integer, ForeignKey('template.id'))
     subject = Column(String)
-    reciver_mail = Column(String)  # separated by ,
+    receiver_mail = Column(String)  # separated by ,
     fields = Column(String)  ##TODO: Hauria de ser un json (@ton)
     sent = Column(Boolean, default=False)
     template: TemplateModel = relationship(TemplateModel)

@@ -18,7 +18,9 @@ class Configuration:
         return yaml_files
 
     def __init__(self, file=None) -> None:
-        '''loads the config and returs if already loaded'''
+        '''Resets the configuration and loads the config file'''
+        # Reset class state for every instance creation
+        self.reset()
 
         if Configuration._FILE is None:
             Configuration.__CONFIG_FILES = Configuration.__get_yaml_files()
@@ -29,7 +31,7 @@ class Configuration:
                 file = Configuration.__CONFIG_FILES[0]
             Configuration._FILE = os.path.join(Configuration.__CONFIG_PATH,
                                                file)
-            Configuration.__instanciate__()
+            self.__instanciate__()
 
     @staticmethod
     def __instanciate_nested(k, v, c):
@@ -40,20 +42,25 @@ class Configuration:
             else:
                 setattr(getattr(c, k), kk, vv)
 
-    @staticmethod
-    def __instanciate__():
-        # Configuration.CONFIG = types.SimpleNamespace()
-        # here = os.path.abspath(os.path.dirname(__file__))
+    def __instanciate__(self):
         with open(Configuration._FILE) as f:
             data = yaml.safe_load(f)
             for k, v in data.items():
                 if type(v) == dict:
-                    Configuration.__instanciate_nested(k, v, Configuration)
-                    # for kk, vv in v.items():
-                    # setattr(getattr(Configuration, k), kk, vv)
-                    # setattr(Configuration.CONFIG, k, v)
+                    self.__instanciate_nested(k, v, Configuration)
                 else:
                     setattr(Configuration, k, v)
+
+    @staticmethod
+    def reset():
+        '''Resets the class-level configuration state'''
+        Configuration._FILE = None
+        Configuration.__CONFIG_FILES = None
+        # Clear dynamically created attributes
+        for key in list(Configuration.__dict__.keys()):
+            if not key.startswith(
+                    '_'):  # Don't delete protected/private attributes
+                delattr(Configuration, key)
 
 
 Configuration()

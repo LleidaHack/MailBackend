@@ -34,7 +34,7 @@ class MailService(BaseService):
     def create(self, payload: MailCreateSchema):
         mail = MailModel(**payload.dict(), sent=False)
         db.session.add(mail)
-        # self.user_client.get_by_id(mail.reciver_id)
+        # self.user_client.get_by_id(mail.receiver_id)
         # self.user_client.get_by_id(mail.sender_id)
         db.session.commit()
         return mail
@@ -62,16 +62,38 @@ class MailService(BaseService):
         return r
 
     def send_next(self):
-        mail = db.session.session.query(MailModel).filter(
+        mail = db.session.query(MailModel).filter(
             MailModel.sent == False).order_by(desc(
                 MailModel.priority)).order_by(asc(
                     MailModel.creation_date)).first()
         if mail is None:
-            raise Exception()
+            raise Exception("no more mails avaliable")
         if mail.sent:
-            Exception()
+            raise Exception("suposadament no possible")
         self.real_send(mail)
         self.set_sent(mail)
+
+    def clear_next_mail(self):
+        print("HOLA")
+        mail = db.session.query(MailModel).filter(
+            MailModel.sent == False).order_by(desc(
+                MailModel.priority)).order_by(asc(
+                    MailModel.creation_date)).first()
+        print(mail)
+        if mail is None:
+            raise Exception("no more mails avaliable")
+        if mail.sent:
+            raise Exception("suposadament no possible")
+        self.set_sent(mail)
+
+    def clear_mail_queue(self):
+        mails = db.session.query(MailModel).filter(
+            MailModel.sent == False).order_by(desc(
+                MailModel.priority)).order_by(asc(MailModel.creation_date))
+        if mails == []:
+            raise Exception("no more mails avaliable")
+        for mail in mails:
+            self.set_sent(mail)
 
     def real_send(self, mail: MailModel):
         # u = self.user_client.get_by_id(mail.sender_id)
@@ -80,9 +102,8 @@ class MailService(BaseService):
         msg['From'] = settings.mail.from_mail
         msg['To'] = mail.reciver_mail
         try:
-            html = MIMEText(
-                mail.template.to_html(mail.fields.replace(' ', '').split(',')),
-                'html')
+            html = MIMEText(mail.template.to_html(mail.fields.split(',')),
+                            'html')
             msg.attach(html)
             if settings.mail.send_mails:
                 # server.sendmail(Configuration.mail.from_mail, [user.email],

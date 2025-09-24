@@ -1,9 +1,13 @@
+from os.path import join
+
 from fastapi import HTTPException
 from fastapi_sqlalchemy import db
 
+from src.configuration.Configuration import Configuration
 from src.impl.Template.model import Template as ModelTemplate
 from src.impl.Template.schema import TemplateCreate, TemplateUpdate
 from src.utils.Base.BaseService import BaseService
+from src.utils.internal_templates.InternalTemplates import InternalTemplates
 from src.utils.service_utils import set_existing_data
 
 
@@ -60,3 +64,30 @@ class TemplateService(BaseService):
         db.session.commit()
         db.session.refresh(db_obj)
         return db_obj
+
+    def update_basic_templates(self):
+        path = join(*Configuration.initial_templates_path.split(','))
+        updated = []
+        for _ in InternalTemplates:
+            template_file_path = join(path, f"{_.value}.html")
+            with open(template_file_path, 'r', encoding='utf-8') as file:
+                n_html = file.read().replace("\"", '\'')
+                try:
+                    t = self.get_by_name(_.value)
+                except:
+                    t = self.create(
+                        TemplateCreate(name=_,
+                                       description=_,
+                                       html=n_html,
+                                       creator_id=0))
+                if not t.html == n_html:
+                    t.html = n_html
+                    updated.append(t)
+        db.session.commit()
+        # db.session.refresh()
+        return len(updated)
+        # op.execute(
+        #     'INSERT INTO Template(creator_id, name, description, html, created_date, is_active, internal) '
+        #     +
+        #     f"VALUES(0, '{_.value}', '{_.value}', E'{html}', {sa.func.current_date()}, {True}, {True})"
+        # )

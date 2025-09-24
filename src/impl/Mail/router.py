@@ -35,11 +35,21 @@ def update(id: int, payload: MailUpdateSchema):
     return mail_service.update(id, payload)
 
 
-@router.put("/send/{id}")
-async def send_by_id(id: int):
-    return mail_service.send_by_id(id)
-
-
-@router.put("/send/next")
+@router.get("/send_next/")
 def send_next_mail():
     return mail_service.send_next()
+
+
+@router.get("/clear_next/")
+def clear_next_mail():
+    return mail_service.clear_next_mail()
+
+
+@router.get("/clear_full/")
+def clear_mail_queue():
+    return mail_service.clear_mail_queue()
+
+
+@router.put("/send/{id}")
+def send_by_id(id: int):
+    return mail_service.send_by_id(id)
