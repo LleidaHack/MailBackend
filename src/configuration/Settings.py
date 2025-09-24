@@ -35,11 +35,7 @@ class MailSettings(BaseSettings):
         description="Name used in the 'From' header",
         env="MAIL__FROM_NAME"
     )
-    send_mails: bool = Field(
-        default=False, 
-        description="Flag to enable/disable sending emails",    
-        env="MAIL__SEND_MAILS"
-    )
+    send_mails: bool = True
 
 
 class DatabaseSettings(BaseSettings):
