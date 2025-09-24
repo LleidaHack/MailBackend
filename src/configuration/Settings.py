@@ -14,23 +14,16 @@ class MailSettings(BaseSettings):
     from_mail: str = Field(
         default="from@example.com",
         description="Email address used in the 'From' header",
-        env="MAIL__FROM"
-    )
-    port: int = Field(
-        default=587, 
-        description="Mail service port",
-        env="MAIL__PORT"
-    )
-    server: str = Field(
-        default="smtp.example.com", 
-        description="Mail service SMTP server",
-        env="MAIL__SERVER"
-    )
-    from_name: str = Field(
-        default="Example Service", 
-        description="Name used in the 'From' header",
-        env="MAIL__FROM_NAME"
-    )
+        env="MAIL__FROM")
+    port: int = Field(default=587,
+                      description="Mail service port",
+                      env="MAIL__PORT")
+    server: str = Field(default="smtp.example.com",
+                        description="Mail service SMTP server",
+                        env="MAIL__SERVER")
+    from_name: str = Field(default="Example Service",
+                           description="Name used in the 'From' header",
+                           env="MAIL__FROM_NAME")
     send_mails: bool = True
 
 
