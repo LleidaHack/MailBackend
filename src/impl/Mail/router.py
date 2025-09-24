@@ -51,5 +51,5 @@ def clear_mail_queue():
 
 
 @router.put("/send/{id}")
-async def send_by_id(id: int):
+def send_by_id(id: int):
     return mail_service.send_by_id(id)
