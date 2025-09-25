@@ -73,7 +73,7 @@ class Settings(BaseSettings):
         alias=AliasChoices("INITIAL_TEMPLATES_PATH"))
 
     # Nested settings
-    mail: MailSettings = Field(default_factory=MailSettings)
+    mail: MailSetting
     database: DatabaseSettings
     clients: ClientSettings
 
