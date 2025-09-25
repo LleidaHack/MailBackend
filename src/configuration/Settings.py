@@ -51,7 +51,7 @@ class Settings(BaseSettings):
                                       env_file_encoding="utf-8",
                                       env_nested_delimiter="__",
                                       case_sensitive=False,
-                                      extra="allow")
+                                      extra="ignore")
 
     # General settings
     front_url: str = Field(
