@@ -3,7 +3,7 @@ from os.path import join
 from fastapi import HTTPException
 from fastapi_sqlalchemy import db
 
-from src.configuration.Configuration import Configuration
+from src.configuration.Settings import settings
 from src.impl.Template.model import Template as ModelTemplate
 from src.impl.Template.schema import TemplateCreate, TemplateUpdate
 from src.utils.Base.BaseService import BaseService
@@ -66,7 +66,7 @@ class TemplateService(BaseService):
         return db_obj
 
     def update_basic_templates(self):
-        path = join(*Configuration.initial_templates_path.split(','))
+        path = join(*settings.initial_templates_path.split(','))
         updated = []
         for _ in InternalTemplates:
             template_file_path = join(path, f"{_.value}.html")

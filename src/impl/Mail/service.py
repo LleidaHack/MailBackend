@@ -1,3 +1,4 @@
+import logging
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from smtplib import SMTP_SSL
@@ -7,12 +8,15 @@ from fastapi_sqlalchemy import db
 from sqlalchemy import asc, desc
 
 # from src.Clients.UserClient import UserClient
-from src.configuration.Configuration import Configuration
+
+from src.configuration.Settings import settings
 from src.impl.Mail.model import Mail as MailModel
 from src.impl.Mail.schema import MailCreate as MailCreateSchema
 # from src.utils.Base.BaseClient import BaseClient
 from src.utils.Base.BaseService import BaseService
 from src.utils.service_utils import set_existing_data
+
+logger = logging.getLogger(__name__)
 
 
 class MailService(BaseService):
@@ -55,7 +59,7 @@ class MailService(BaseService):
     def send_by_id(self, id: int):
         mail = self.get_by_id(id)
         if mail.sent:
-            Exception('sent?')
+            raise Exception('sent?')
         r = self.real_send(mail)
         self.set_sent(mail)
         return r
@@ -98,25 +102,28 @@ class MailService(BaseService):
         # u = self.user_client.get_by_id(mail.sender_id)
         msg = MIMEMultipart('related')
         msg['Subject'] = mail.subject
-        msg['From'] = Configuration.mail.from_mail
+        msg['From'] = settings.mail.from_mail
         msg['To'] = mail.receiver_mail
         try:
             html = MIMEText(mail.template.to_html(mail.fields.split(',')),
                             'html')
             msg.attach(html)
-            if Configuration.mail.send_mails:
+            if settings.mail.send_mails:
                 # server.sendmail(Configuration.mail.from_mail, [user.email],
-                with SMTP_SSL(Configuration.mail.server,
-                              Configuration.mail.port) as server:
-                    server.login(Configuration.mail.username,
-                                 Configuration.mail.password)
+                with SMTP_SSL(settings.mail.server,
+                              settings.mail.port) as server:
+                    server.login(settings.mail.username,
+                                 settings.mail.password)
+                    logger.info('Login successful, sending email to %s',
+                                mail.receiver_mail)
                     server.sendmail(
-                        Configuration.mail.from_mail,
+                        settings.mail.from_mail,
                         [mail.receiver_mail.replace(' ', '').split(',')],
                         msg.as_string())
+                    logger.info('sent')
             else:
-                print(
-                    'Mail sending is disabled i you really want to send mails enable it in the config'
+                logger.info(
+                    'Mail sending is disabled. To send emails, enable it in the config.'
                 )
         except Exception as e:
             raise e

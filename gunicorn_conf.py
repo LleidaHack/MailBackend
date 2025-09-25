@@ -1,9 +1,9 @@
 from multiprocessing import cpu_count
 
-from src.configuration.Configuration import Configuration
+from src.configuration.Settings import settings
 
 #socket path
-bind = f"localhost:{Configuration.port}"
+bind = f"0.0.0.0:{settings.port}"
 
 #worker options
 workers = cpu_count() + 1
@@ -11,5 +11,6 @@ worker_class = 'uvicorn.workers.UvicornWorker'
 
 #Logging options
 loglevel = 'debug'
-accesslog = './logs/gunicorn_access.log'
-errorlog = './logs/gunicorn_error.log'
+accesslog = '-'
+errorlog = '-'
+capture_output = True
