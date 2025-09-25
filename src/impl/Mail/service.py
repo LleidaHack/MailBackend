@@ -114,7 +114,8 @@ class MailService(BaseService):
                               settings.mail.port) as server:
                     server.login(settings.mail.username,
                                  settings.mail.password)
-                    logger.info('Login successful, sending email to %s', mail.receiver_mail)
+                    logger.info('Login successful, sending email to %s',
+                                mail.receiver_mail)
                     server.sendmail(
                         settings.mail.from_mail,
                         [mail.receiver_mail.replace(' ', '').split(',')],

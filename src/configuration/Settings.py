@@ -19,23 +19,16 @@ class MailSettings(BaseSettings):
     from_mail: str = Field(
         default="from@example.com",
         description="Email address used in the 'From' header",
-        alias=AliasChoices("MAIL__FROM")
-    )
-    port: int = Field(
-        default=587, 
-        description="Mail service port",
-        alias=AliasChoices("MAIL__PORT")
-    )
-    server: str = Field(
-        default="smtp.example.com", 
-        description="Mail service SMTP server",
-        alias=AliasChoices("MAIL__SERVER")
-    )
-    from_name: str = Field(
-        default="Example Service", 
-        description="Name used in the 'From' header",
-        alias=AliasChoices("MAIL__FROM_NAME")
-    )
+        alias=AliasChoices("MAIL__FROM"))
+    port: int = Field(default=587,
+                      description="Mail service port",
+                      alias=AliasChoices("MAIL__PORT"))
+    server: str = Field(default="smtp.example.com",
+                        description="Mail service SMTP server",
+                        alias=AliasChoices("MAIL__SERVER"))
+    from_name: str = Field(default="Example Service",
+                           description="Name used in the 'From' header",
+                           alias=AliasChoices("MAIL__FROM_NAME"))
     send_mails: bool = True
 
 
@@ -86,13 +79,12 @@ class Settings(BaseSettings):
     #                 description="Mail service URL",
     #                 alias=AliasChoices("CLIENTS__MAIL_CLIENT__URL"))
     # Nested settings
-    port:int = Field(
-        default=8001, 
-        description="back_port",
-        alias=AliasChoices("PORT")
-    )
+    port: int = Field(default=8001,
+                      description="back_port",
+                      alias=AliasChoices("PORT"))
     database: DatabaseSettings
     mail: MailSettings
+
     #clients: ClientSettings
 
     def __init__(self, **kwargs):
@@ -100,10 +92,11 @@ class Settings(BaseSettings):
         # env = os.environ.get('ENV', 'main')
 
         super().__init__(**kwargs)
+
+
 #        self.databse=DatabaseSettings()
 #        self.mail=MailSettings()
 #        self.clients=ClientSettings()
-
 
 # Global settings instance
 settings = Settings()
