@@ -103,7 +103,7 @@ class MailService(BaseService):
         msg = MIMEMultipart('related')
         msg['Subject'] = mail.subject
         msg['From'] = settings.mail.from_mail
-        msg['To'] = mail.reciver_mail
+        msg['To'] = mail.receiver_mail
         try:
             html = MIMEText(mail.template.to_html(mail.fields.split(',')),
                             'html')
@@ -114,10 +114,10 @@ class MailService(BaseService):
                               settings.mail.port) as server:
                     server.login(settings.mail.username,
                                  settings.mail.password)
-                    logger.info('Login successful, sending email to %s', mail.reciver_mail)
+                    logger.info('Login successful, sending email to %s', mail.receiver_mail)
                     server.sendmail(
                         settings.mail.from_mail,
-                        [mail.reciver_mail.replace(' ', '').split(',')],
+                        [mail.receiver_mail.replace(' ', '').split(',')],
                         msg.as_string())
                     logger.info('sent')
             else:
