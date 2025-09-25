@@ -86,7 +86,11 @@ class Settings(BaseSettings):
     #                 description="Mail service URL",
     #                 alias=AliasChoices("CLIENTS__MAIL_CLIENT__URL"))
     # Nested settings
-    
+    port:int = Field(
+        default=8001, 
+        description="back_port",
+        alias=AliasChoices("PORT")
+    )
     database: DatabaseSettings
     mail: MailSettings
     #clients: ClientSettings
