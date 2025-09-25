@@ -34,10 +34,10 @@ import os
     #send_mails: bool = True
 
 
-#class DatabaseSettings(BaseSettings):
-#    url: str = Field(...,
-#                     description="Database connection URL",
-#                     alias=AliasChoices("DATABASE__URL"))
+class DatabaseSettings(BaseSettings):
+    url: str = Field(...,
+                     description="Database connection URL",
+                     alias=AliasChoices("DATABASE__URL"))
 
 
 #class ClientSettings(BaseSettings):
@@ -54,9 +54,9 @@ class Settings(BaseSettings):
                                       extra="ignore")
 
     # General settings
-    url: str = Field(...,
-                     description="Database connection URL",
-                     alias=AliasChoices("DATABASE__URL"))
+    #url: str = Field(...,
+    #                 description="Database connection URL",
+    #                 alias=AliasChoices("DATABASE__URL"))
     front_url: str = Field(
         default="https://frontend.integration.lleidahack.dev/hackeps",
         description="Frontend URL",
@@ -100,13 +100,13 @@ class Settings(BaseSettings):
         description="Name used in the 'From' header",
         alias=AliasChoices("MAIL__FROM_NAME")
     )
-    url: str = Field(...,
-                     description="Mail service URL",
-                     alias=AliasChoices("CLIENTS__MAIL_CLIENT__URL"))
+    #url: str = Field(...,
+    #                 description="Mail service URL",
+    #                 alias=AliasChoices("CLIENTS__MAIL_CLIENT__URL"))
     send_mails: bool = True
     # Nested settings
     
-    #database: DatabaseSettings
+    database: DatabaseSettings
     #mail: MailSettings
     #clients: ClientSettings
 
