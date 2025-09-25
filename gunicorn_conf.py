@@ -3,7 +3,7 @@ from multiprocessing import cpu_count
 from src.configuration.Settings import settings
 
 #socket path
-bind = f"localhost:{settings.port}"
+bind = f"0.0.0.0:{settings.port}"
 
 #worker options
 workers = cpu_count() + 1
