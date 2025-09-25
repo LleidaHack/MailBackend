@@ -7,29 +7,29 @@ import os
 class MailSettings(BaseSettings):
     username: str = Field(default="username",
                           description="Mail service username",
-                          env="MAIL__USERNAME")
+                          alias="MAIL__USERNAME")
     password: str = Field(default="password",
                           description="Mail service password",
-                          env="MAIL__PASSWORD")
+                          alias="MAIL__PASSWORD")
     from_mail: str = Field(
         default="from@example.com",
         description="Email address used in the 'From' header",
-        env="MAIL__FROM"
+        alias="MAIL__FROM"
     )
     port: int = Field(
         default=587, 
         description="Mail service port",
-        env="MAIL__PORT"
+        alias="MAIL__PORT"
     )
     server: str = Field(
         default="smtp.example.com", 
         description="Mail service SMTP server",
-        env="MAIL__SERVER"
+        alias="MAIL__SERVER"
     )
     from_name: str = Field(
         default="Example Service", 
         description="Name used in the 'From' header",
-        env="MAIL__FROM_NAME"
+        alias="MAIL__FROM_NAME"
     )
     send_mails: bool = True
 
@@ -37,13 +37,13 @@ class MailSettings(BaseSettings):
 class DatabaseSettings(BaseSettings):
     url: str = Field(...,
                      description="Database connection URL",
-                     env="DATABASE__URL")
+                     alias="DATABASE__URL")
 
 
 class ClientSettings(BaseSettings):
     url: str = Field(...,
                      description="Mail service URL",
-                     env="CLIENTS__MAIL_CLIENT__URL")
+                     alias="CLIENTS__MAIL_CLIENT__URL")
 
 
 class Settings(BaseSettings):
@@ -57,20 +57,20 @@ class Settings(BaseSettings):
     front_url: str = Field(
         default="https://frontend.integration.lleidahack.dev/hackeps",
         description="Frontend URL",
-        env="FRONT_URL")
+        alias="FRONT_URL")
     back_url: str = Field(default="http://localhost:8000/",
                           description="Backend URL",
-                          env="BACK_URL")
+                          alias="BACK_URL")
     static_folder: str = Field(default="static",
                                description="Static files folder path",
-                               env="STATIC_FOLDER")
+                               alias="STATIC_FOLDER")
     contact_mail: str = Field(default="contacte@lleidahack.dev",
                               description="Contact email address",
-                              env="CONTACT_MAIL")
+                              alias="CONTACT_MAIL")
     initial_templates_path: str = Field(
         default="src/templates/emails/initial.html",
         description="Path to the initial email template",
-        env="INITIAL_TEMPLATES_PATH")
+        alias="INITIAL_TEMPLATES_PATH")
 
     # Nested settings
     mail: MailSettings = Field(default_factory=MailSettings)
