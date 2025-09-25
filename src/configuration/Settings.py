@@ -83,6 +83,9 @@ class Settings(BaseSettings):
         # env = os.environ.get('ENV', 'main')
 
         super().__init__(**kwargs)
+        self.databse=DatabaseSettings()
+        self.mail=MailSettings()
+        self.clients=ClientSettings()
 
 
 # Global settings instance
