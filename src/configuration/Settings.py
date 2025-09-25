@@ -73,8 +73,9 @@ class Settings(BaseSettings):
         alias=AliasChoices("INITIAL_TEMPLATES_PATH"))
 
     # Nested settings
-    mail: MailSetting
+    
     database: DatabaseSettings
+    mail: MailSettings
     clients: ClientSettings
 
     def __init__(self, **kwargs):
