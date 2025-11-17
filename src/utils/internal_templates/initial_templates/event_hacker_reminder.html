@@ -1,0 +1,117 @@
+<html>
+<head>
+    <style>
+        body {
+            font-family: monospace;
+            margin: 0;
+            padding: 0;
+            background-color: #f5e9a2;
+            font-size: 16px;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 20px auto;
+            background-color: #f0f0f0;
+        }
+
+        .header {
+            min-height: 250px;
+            text-align: center;
+            color: white;
+            background-image: url('$_static_folder/banner.png');
+            background-size: cover;
+            background-position: center;
+            position: relative; 
+        }
+
+        .logo {
+            max-width: 400px; 
+            position: absolute; 
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+        }
+
+        .content {
+            padding: 30px 50px;
+            text-align: justify;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #694514; 
+            color: white;
+            text-decoration: none;
+        }
+
+        .button:hover {
+            background-color: #473113; 
+        }
+
+        .button a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .button a:hover {
+            color: white;
+            text-decoration: none;
+        }
+    
+
+        .social-icons-container {
+            text-align: center; 
+            font-size: 12px;
+        }
+
+        .social-icon {
+            height: 30px; 
+            cursor: pointer; 
+            margin: 10px 5px;
+        }
+
+        
+        a {
+            color: #473113; 
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: #727272; 
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+        </div>
+        <div class="content">
+            <p>Hola <b>$name</b>,</p>
+            <p>Falta poc per a donar inici a la <b>$event_name</b>: només queden <b>$days_left dies</b>!</p>
+            <p>Ens faria molta il·lusió comptar amb tu. Necessitem la teva confirmació, <b>confirma la teva assistència fent clic al següent botó.</b></p>
+            <a href="$_front_link/assistance?confirm=true&token=$token">
+                <div class="button">
+                    <b>Confirmar assistència</b>
+                </div>
+            </a>
+           
+            <p>Per a qualsevol dubte, contacta'ns a <a href="mailto:$_contact_mail">$_contact_mail</a>.</p>
+            <p>Ens fa molta il·lusió veure't a <b>$event_name</b>!</p>
+            <p><b>Equip de LleidaHack</b></p>
+            <br><br><br>
+            <div class="social-icons-container">
+                <p>Rep aquest correu perquè t'has inscrit a <b>$event_name</b>.</p>
+                <p>Si creus que és un error, envia'ns un correu a <a href="mailto:$_contact_mail">$_contact_mail</a></p>
+                <a href="https://twitter.com/hackeps"><img class="social-icon" src="$_static_folder/x_gris.png" alt="x"><a>
+                <a href="https://www.linkedin.com/company/hackeps/"><img class="social-icon" src="$_static_folder/linkedin_gris.png" alt="Linkedin"><a>
+                <a href="https://www.instagram.com/hackeps_/"><img class="social-icon" src="$_static_folder/instagram_gris.png" alt="Instagram"><a>
+                <a href="https://www.youtube.com/@LleidaHack"><img class="social-icon" src="$_static_folder/youtube_gris.png" alt="Youtube"><a>
+                <a href="https://www.twitch.tv/lleidahack"><img class="social-icon" src="$_static_folder/twitch_gris.png" alt="Twitch"><a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
