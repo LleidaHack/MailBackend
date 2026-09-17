@@ -6,14 +6,16 @@ This folder is not loaded by the mail service. No emails have been sent.
 
 Orange actions and masthead, sky-blue illustrated header, charcoal body and the
 actual tenth-edition logo. Uses table layout, inline core styles, system monospace
-fonts, small PNG illustrations and text social links. No scripts in email files.
+fonts, small PNG illustrations and text social links. No scripts in email files. Clouds use optional CSS animation; clients without
+animation support keep the PNG clouds visible and static. Reduced motion is respected.
 
 Run `python3 build.py` to regenerate drafts and previews. It checks variable names
 and first-occurrence order against the originals: the current renderer consumes
 positional comma-separated values. No new per-message fields are required.
 
 For later integration, publish assets under the configured static folder at
-`hackeps-2026/hackeps-logo.png` and `hackeps-2026/hacker.png`, copy approved drafts
+`hackeps-2026/hackeps-logo.png`, `hackeps-2026/hacker.png`,
+`hackeps-2026/cloud-left.png` and `hackeps-2026/cloud-right.png`, copy approved drafts
 into `src/utils/internal_templates/initial_templates`, then refresh stored templates
 through the existing backend template-update process.
 
