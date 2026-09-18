@@ -1,6 +1,6 @@
 # HackEPS 2026 email design proposal
 
-Open index.html to compare eight email previews at desktop and mobile widths.
+Open index.html to compare nine email previews at desktop and mobile widths.
 Templates contain existing backend variables; previews contain fictional examples.
 This folder is not loaded by the mail service. No emails have been sent.
 
