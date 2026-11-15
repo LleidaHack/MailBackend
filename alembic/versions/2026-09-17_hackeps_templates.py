@@ -14,13 +14,25 @@ ROOT = Path(__file__).resolve().parents[2]
 def update_templates(templates):
     connection = op.get_bind()
     for name, markup in templates.items():
-        connection.execute(sa.text("UPDATE template SET html=:html WHERE name=:name"), {"name": name, "html": markup})
+        connection.execute(
+            sa.text("UPDATE template SET html=:html WHERE name=:name"), {
+                "name": name,
+                "html": markup
+            })
 
 
 def upgrade():
-    update_templates({p.stem: p.read_text(encoding="utf-8") for p in
-                      (ROOT / "src/utils/internal_templates/initial_templates").glob("*.html")})
+    update_templates({
+        p.stem: p.read_text(encoding="utf-8")
+        for p in (
+            ROOT /
+            "src/utils/internal_templates/initial_templates").glob("*.html")
+    })
 
 
 def downgrade():
-    update_templates(json.loads((ROOT / "alembic/template_snapshots/before_hackeps_2026.json").read_text(encoding="utf-8")))
+    update_templates(
+        json.loads(
+            (ROOT /
+             "alembic/template_snapshots/before_hackeps_2026.json").read_text(
+                 encoding="utf-8")))
