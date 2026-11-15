@@ -11,11 +11,14 @@ depends_on = None
 
 
 def upgrade():
-    markup = (Path(__file__).resolve().parents[2] /
-              "src/utils/internal_templates/initial_templates/company_account_invite.html").read_text(encoding="utf-8")
-    op.get_bind().execute(sa.text(
-        "UPDATE template SET html = :html WHERE name = 'company_account_invite'"
-    ), {"html": markup})
+    markup = (
+        Path(__file__).resolve().parents[2] /
+        "src/utils/internal_templates/initial_templates/company_account_invite.html"
+    ).read_text(encoding="utf-8")
+    op.get_bind().execute(
+        sa.text(
+            "UPDATE template SET html = :html WHERE name = 'company_account_invite'"
+        ), {"html": markup})
 
 
 def downgrade():
