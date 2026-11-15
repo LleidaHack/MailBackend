@@ -1,28 +1,142 @@
 from pathlib import Path
 from string import Template
 import html, json
+
 root = Path(__file__).resolve().parent
 
-def action(label,url):
- return f'''<table role="presentation" cellspacing="0" cellpadding="0" style="margin:28px 0;width:100%"><tr><td bgcolor="#ff7430" align="center" style="border-radius:4px"><a href="{url}" style="display:block;padding:18px 20px;border:1px solid #ff7430;border-radius:4px;font:700 16px 'Courier New',monospace;color:#232323;text-decoration:none">{label} &nbsp;↗</a></td></tr></table>'''
-def note(title,body):
- return f'<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin:24px 0"><tr><td bgcolor="#393939" style="padding:18px 20px;border-left:3px solid #ff7430"><strong style="color:#ffb48c">{title}</strong><br>{body}</td></tr></table>'
-def p(text): return f'<p style="margin:0 0 18px">{text}</p>'
-def qr(alt_code,url,code):
- return f'''<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin:24px 0"><tr><td align="center" bgcolor="#f7f5ef" style="padding:24px 20px;border-radius:6px"><img alt="Codi QR del tiquet {alt_code}" src="{url}" width="220" height="220" style="display:block;width:220px;height:220px;border:0;margin:0 auto"><p style="margin:16px 0 0;font:700 18px/1.4 'Courier New',monospace;letter-spacing:2px;color:#232323">{code}</p><p style="margin:4px 0 0;font:12px/1.6 'Courier New',monospace;color:#69635c">Si el QR no es veu, ensenya aquest codi.</p></td></tr></table>'''
-items=[
-('user_created','Verifica el teu correu','01 / EL PRIMER PAS','Ja ets gairebé<br>un dels nostres.',p('Hola, <strong>$name</strong>!')+p('Benvingut/da a la comunitat HackEPS. Verifica el teu correu per començar a preparar la teva pròxima hackató.')+action('Verifica el meu correu','$_front_link/validate-email/?token=$token')+note('I després?','Torna a la pestanya del registre. Si la mantens oberta, iniciarem la sessió automàticament.')+p('Si no has creat aquest compte, pots ignorar aquest missatge.'),'Has rebut aquest correu perquè has creat un compte a la web de LleidaHack.'),
-('event_hacker_registered','Hem rebut la teva inscripció','02 / INSCRIPCIÓ REBUDA','El primer repte,<br>completat.',p('Hola, <strong>$name</strong>!')+p('Hem rebut la teva inscripció a la HackEPS. Ara ens toca revisar-la.')+note('Pendent de revisió','Aquest correu confirma que hem rebut les teves dades. Encara no confirma la teva plaça.')+p('T’avisarem per correu quan la teva inscripció sigui acceptada i et direm com confirmar l’assistència.')+action('Resol els teus dubtes','$_front_link/faq'),'Has rebut aquest correu perquè t’has inscrit a la HackEPS.'),
-('event_hacker_accepted','La teva plaça t’espera','03 / PLAÇA ACCEPTADA','Hi comptes.<br>Ens ho confirmes?',p('Felicitats, <strong>$name</strong>!')+p('La teva inscripció a <strong>$event_name</strong> ha estat acceptada.')+note('Tens $days_left dies per confirmar','El termini comença quan reps aquest correu. Si no confirmes l’assistència, podrem oferir la plaça a un altre hacker.')+action('Confirma la meva assistència','$_front_link/assistance?confirm=true&token=$token')+p('Si no pots venir, ens ajudaràs a alliberar la plaça: <a style="color:#ffb48c" href="$_front_link/assistance?confirm=false&token=$token">No podré assistir-hi</a>.'),'Has rebut aquest correu perquè t’has inscrit a la HackEPS.'),
-('event_hacker_reminder','Recordatori de confirmació','04 / ENS FALTA EL TEU SÍ','No et quedis<br>fora del repte.',p('Hola, <strong>$name</strong>!')+p('Falta poc per a <strong>$event_name</strong>: només queden <strong>$days_left dies</strong>.')+note('La teva confirmació està pendent','Necessitem saber si vindràs. Confirma l’assistència per completar aquest pas.')+action('Confirma la meva assistència','$_front_link/assistance?confirm=true&token=$token'),'Has rebut aquest recordatori perquè tens una confirmació pendent.'),
-('event_registration_reminder','Vine a la HackEPS','ENCARA HI ETS A TEMPS','Una idea.<br>Un equip. Tu.',p('Hola, <strong>$name</strong>!')+p('Ja tens compte. El següent pas és inscriure’t a la HackEPS: t’hi esperen reptes, aprenentatge i moltes ganes de crear en equip.')+action('Vull inscriure’m','$_front_link/inscripcio')+p('Inicia sessió, completa el formulari i espera el correu amb el resultat de la revisió de la teva inscripció.'),'Has rebut aquest correu perquè tens un compte a LleidaHack.'),
-('reset_password','Recupera l’accés al teu compte','ACCÉS AL TEU COMPTE','Tornem<br>a començar.',p('Hola, <strong>$name</strong>!')+p('Hem rebut una petició per canviar la contrasenya del teu compte. Pots triar-ne una de nova amb aquest botó.')+action('Canvia la contrasenya','$_front_link/confirm-password/?token=$token')+note('No ho has demanat tu?','Ignora aquest correu. No canviarem la contrasenya si no completes el procés.'),'Has rebut aquest correu perquè s’ha sol·licitat un canvi de contrasenya.'),
-('event_slack_invite','Entra a la comunitat','LA CONVERSA CONTINUA','El teu equip<br>t’espera al Slack.',p('La HackEPS també es viu entre missatges. Ja pots entrar al nostre Slack per seguir les novetats i parlar amb la comunitat.')+action('Entra al Slack','$slack_url')+p('Presenta’t, comparteix idees i comença a conèixer la resta de hackers.'),'Has rebut aquesta invitació com a participant de la comunitat HackEPS.'),
-('event_hacker_ticket','El teu tiquet de check-in','05 / TOT A PUNT','Aquest és<br>el teu tiquet.',p('Hola, <strong>$name</strong>!')+p('Ja tens plaça confirmada a <strong>$event_name</strong>. Aquest QR és el teu tiquet d’entrada: ensenya’l al check-in i et donarem la teva acreditació.')+qr('$code','$qr_url','$code')+note('Guarda aquest correu','El tiquet és personal. Si el perds, també el trobaràs al teu perfil de la web.')+action('Veure el meu tiquet','$_front_link/perfil'),'Has rebut aquest correu perquè tens una plaça confirmada a la HackEPS.'),
-('contact','Nou missatge de contacte','BÚSTIA DE L’ORGANITZACIÓ','Tenim<br>un missatge.',p('<strong>$name</strong> ens ha escrit des de <strong>$email</strong>.')+note('$title','$message')+p('Respon al correu indicat per continuar la conversa.'),'Notificació interna del formulari de contacte de la HackEPS.'),
+
+def action(label, url):
+    return f'''<table role="presentation" cellspacing="0" cellpadding="0" style="margin:28px 0;width:100%"><tr><td bgcolor="#ff7430" align="center" style="border-radius:4px"><a href="{url}" style="display:block;padding:18px 20px;border:1px solid #ff7430;border-radius:4px;font:700 16px 'Courier New',monospace;color:#232323;text-decoration:none">{label} &nbsp;↗</a></td></tr></table>'''
+
+
+def note(title, body):
+    return f'<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin:24px 0"><tr><td bgcolor="#393939" style="padding:18px 20px;border-left:3px solid #ff7430"><strong style="color:#ffb48c">{title}</strong><br>{body}</td></tr></table>'
+
+
+def p(text):
+    return f'<p style="margin:0 0 18px">{text}</p>'
+
+
+def qr(alt_code, url, code):
+    return f'''<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin:24px 0"><tr><td align="center" bgcolor="#f7f5ef" style="padding:24px 20px;border-radius:6px"><img alt="Codi QR del tiquet {alt_code}" src="{url}" width="220" height="220" style="display:block;width:220px;height:220px;border:0;margin:0 auto"><p style="margin:16px 0 0;font:700 18px/1.4 'Courier New',monospace;letter-spacing:2px;color:#232323">{code}</p><p style="margin:4px 0 0;font:12px/1.6 'Courier New',monospace;color:#69635c">Si el QR no es veu, ensenya aquest codi.</p></td></tr></table>'''
+
+
+items = [
+    ('user_created', 'Verifica el teu correu', '01 / EL PRIMER PAS',
+     'Ja ets gairebé<br>un dels nostres.', p('Hola, <strong>$name</strong>!') +
+     p('Benvingut/da a la comunitat HackEPS. Verifica el teu correu per començar a preparar la teva pròxima hackató.'
+       ) + action('Verifica el meu correu',
+                  '$_front_link/validate-email/?token=$token') +
+     note(
+         'I després?',
+         'Torna a la pestanya del registre. Si la mantens oberta, iniciarem la sessió automàticament.'
+     ) + p('Si no has creat aquest compte, pots ignorar aquest missatge.'),
+     'Has rebut aquest correu perquè has creat un compte a la web de LleidaHack.'
+     ),
+    ('event_hacker_registered', 'Hem rebut la teva inscripció',
+     '02 / INSCRIPCIÓ REBUDA', 'El primer repte,<br>completat.',
+     p('Hola, <strong>$name</strong>!') +
+     p('Hem rebut la teva inscripció a la HackEPS. Ara ens toca revisar-la.') +
+     note(
+         'Pendent de revisió',
+         'Aquest correu confirma que hem rebut les teves dades. Encara no confirma la teva plaça.'
+     ) +
+     p('T’avisarem per correu quan la teva inscripció sigui acceptada i et direm com confirmar l’assistència.'
+       ) + action('Resol els teus dubtes', '$_front_link/faq'),
+     'Has rebut aquest correu perquè t’has inscrit a la HackEPS.'),
+    ('event_hacker_accepted', 'La teva plaça t’espera', '03 / PLAÇA ACCEPTADA',
+     'Hi comptes.<br>Ens ho confirmes?',
+     p('Felicitats, <strong>$name</strong>!') +
+     p('La teva inscripció a <strong>$event_name</strong> ha estat acceptada.')
+     + note(
+         'Tens $days_left dies per confirmar',
+         'El termini comença quan reps aquest correu. Si no confirmes l’assistència, podrem oferir la plaça a un altre hacker.'
+     ) + action('Confirma la meva assistència',
+                '$_front_link/assistance?confirm=true&token=$token') +
+     p('Si no pots venir, ens ajudaràs a alliberar la plaça: <a style="color:#ffb48c" href="$_front_link/assistance?confirm=false&token=$token">No podré assistir-hi</a>.'
+       ), 'Has rebut aquest correu perquè t’has inscrit a la HackEPS.'),
+    ('event_hacker_reminder', 'Recordatori de confirmació',
+     '04 / ENS FALTA EL TEU SÍ', 'No et quedis<br>fora del repte.',
+     p('Hola, <strong>$name</strong>!') +
+     p('Falta poc per a <strong>$event_name</strong>: només queden <strong>$days_left dies</strong>.'
+       ) +
+     note(
+         'La teva confirmació està pendent',
+         'Necessitem saber si vindràs. Confirma l’assistència per completar aquest pas.'
+     ) + action('Confirma la meva assistència',
+                '$_front_link/assistance?confirm=true&token=$token'),
+     'Has rebut aquest recordatori perquè tens una confirmació pendent.'),
+    ('event_registration_reminder', 'Vine a la HackEPS',
+     'ENCARA HI ETS A TEMPS', 'Una idea.<br>Un equip. Tu.',
+     p('Hola, <strong>$name</strong>!') +
+     p('Ja tens compte. El següent pas és inscriure’t a la HackEPS: t’hi esperen reptes, aprenentatge i moltes ganes de crear en equip.'
+       ) + action('Vull inscriure’m', '$_front_link/inscripcio') +
+     p('Inicia sessió, completa el formulari i espera el correu amb el resultat de la revisió de la teva inscripció.'
+       ), 'Has rebut aquest correu perquè tens un compte a LleidaHack.'),
+    ('reset_password', 'Recupera l’accés al teu compte', 'ACCÉS AL TEU COMPTE',
+     'Tornem<br>a començar.', p('Hola, <strong>$name</strong>!') +
+     p('Hem rebut una petició per canviar la contrasenya del teu compte. Pots triar-ne una de nova amb aquest botó.'
+       ) + action('Canvia la contrasenya',
+                  '$_front_link/confirm-password/?token=$token') +
+     note(
+         'No ho has demanat tu?',
+         'Ignora aquest correu. No canviarem la contrasenya si no completes el procés.'
+     ),
+     'Has rebut aquest correu perquè s’ha sol·licitat un canvi de contrasenya.'
+     ),
+    ('event_slack_invite', 'Entra a la comunitat', 'LA CONVERSA CONTINUA',
+     'El teu equip<br>t’espera al Slack.',
+     p('La HackEPS també es viu entre missatges. Ja pots entrar al nostre Slack per seguir les novetats i parlar amb la comunitat.'
+       ) + action('Entra al Slack', '$slack_url') +
+     p('Presenta’t, comparteix idees i comença a conèixer la resta de hackers.'
+       ),
+     'Has rebut aquesta invitació com a participant de la comunitat HackEPS.'),
+    ('event_hacker_ticket', 'El teu tiquet de check-in', '05 / TOT A PUNT',
+     'Aquest és<br>el teu tiquet.', p('Hola, <strong>$name</strong>!') +
+     p('Ja tens plaça confirmada a <strong>$event_name</strong>. Aquest QR és el teu tiquet d’entrada: ensenya’l al check-in i et donarem la teva acreditació.'
+       ) + qr('$code', '$qr_url', '$code') +
+     note(
+         'Guarda aquest correu',
+         'El tiquet és personal. Si el perds, també el trobaràs al teu perfil de la web.'
+     ) + action('Veure el meu tiquet', '$_front_link/perfil'),
+     'Has rebut aquest correu perquè tens una plaça confirmada a la HackEPS.'),
+    ('contact', 'Nou missatge de contacte', 'BÚSTIA DE L’ORGANITZACIÓ',
+     'Tenim<br>un missatge.',
+     p('<strong>$name</strong> ens ha escrit des de <strong>$email</strong>.')
+     + note('$title', '$message') +
+     p('Respon al correu indicat per continuar la conversa.'),
+     'Notificació interna del formulari de contacte de la HackEPS.'),
+    ('company_account_invite', 'Creeu el vostre compte d’usuari', '',
+     'Ens preparem<br>per a la HackEPS.',
+     p('Hola, equip de <strong>$company_name</strong>!') +
+     p('Per preparar la vostra participació a la HackEPS, us demanem que creeu un compte d’usuari a la web de LleidaHack.'
+       ) + action('Crea un compte d’usuari', '$registration_url') +
+     p('Completeu el registre i verifiqueu el correu electrònic amb l’enllaç que rebreu.'
+       ) +
+     note(
+         'Ja teniu un compte?',
+         'No cal que en creeu un altre. Si teniu cap dubte, responeu a l’equip de LleidaHack a través del correu de contacte que trobareu al peu.'
+     ),
+     'Has rebut aquest correu com a contacte d’una empresa participant a la HackEPS.'
+     ),
+    ('event_hacker_release_reminder',
+     'No podràs venir? Allibera la teva plaça', '',
+     'Si no pots venir,<br>cedeix el teu lloc.',
+     p('Hola, <strong>$name</strong>!') +
+     p('S’acosta <strong>$event_name</strong> i volem que tothom qui pugui participar-hi tingui l’oportunitat de fer-ho.'
+       ) +
+     p('Si finalment no podràs venir, allibera la teva plaça perquè una altra persona es pugui apuntar.'
+       ) + action('No podré venir · Allibera la meva plaça',
+                  '$_front_link/assistance?confirm=false&amp;token=$token') +
+     note(
+         'Si vindràs, no has de fer res',
+         'Aquest recordatori és per a tots els participants. Fes servir l’enllaç només si vols renunciar a la teva plaça.'
+     ) + p('Gràcies per avisar-nos i ajudar-nos a fer lloc a més hackers!'),
+     'Has rebut aquest recordatori perquè t’has inscrit a la HackEPS.'),
 ]
-for key,subject,kicker,title,body,reason in items:
- text=f'''<!doctype html>
+for key, subject, kicker, title, body, reason in items:
+    kicker_markup = f'<p style="margin:0 0 16px;font-size:11px;letter-spacing:1.3px;color:#ff9b66;font-weight:bold">{kicker}</p>' if kicker else ''
+    text = f'''<!doctype html>
 <html lang="ca"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="dark light"><meta name="supported-color-schemes" content="dark light"><title>{subject} · HackEPS</title>
 <style>@media only screen and (max-width:620px){{.shell{{width:100%!important}}.pad{{padding:28px 22px!important}}.headline{{font-size:32px!important}}.outer{{padding:0!important}}}} .email-cloud-left{{animation:cloud-drift-left 18s ease-in-out infinite alternate}}.email-cloud-right{{animation:cloud-drift-right 22s ease-in-out infinite alternate}}@keyframes cloud-drift-left{{from{{transform:translateX(-8px)}}to{{transform:translateX(10px)}}}}@keyframes cloud-drift-right{{from{{transform:translateX(8px)}}to{{transform:translateX(-10px)}}}}@media(prefers-reduced-motion:reduce){{.email-cloud-left,.email-cloud-right{{animation:none!important}}}} a:focus{{outline:2px solid #ffb48c;outline-offset:4px}}</style></head>
 <body bgcolor="#202020" style="margin:0;padding:0;background:#202020;color:#f7f5ef">
@@ -32,7 +146,7 @@ for key,subject,kicker,title,body,reason in items:
 <tr><td bgcolor="#ff7430" style="padding:14px 26px;color:#232323;font:700 13px 'Courier New',monospace;letter-spacing:1px">LLEIDAHACK <span style="float:right">HACKEPS / 10a EDICIÓ</span></td></tr>
 <tr><td bgcolor="#97cef2" align="center" style="padding:24px 20px 22px"><table role="presentation" width="100%" cellspacing="0" cellpadding="0"><tr><td width="30%" align="center" valign="bottom" style="padding:0 12px 24px 0"><img class="email-cloud-left" src="$_static_folder/hackeps-2026/cloud-left.png" alt="" width="120" style="display:block;width:100%;max-width:120px;height:auto;border:0"></td><td width="150" align="center"><img src="$_static_folder/hackeps-2026/hackeps-logo.png" alt="HackEPS · 10a edició" width="150" height="158" style="display:block;width:150px;height:158px;border:0;object-fit:contain"></td><td width="30%" align="center" valign="top" style="padding:14px 0 0 12px"><img class="email-cloud-right" src="$_static_folder/hackeps-2026/cloud-right.png" alt="" width="120" style="display:block;width:100%;max-width:120px;height:auto;border:0"></td></tr></table><p style="margin:12px 0 0;font:700 12px 'Courier New',monospace;letter-spacing:2px;color:#2e2e2e">10 ANYS FENT HACKEPS</p></td></tr>
 <tr><td bgcolor="#2e2e2e" class="pad" style="padding:36px 42px 32px;font:16px/1.7 'Courier New',monospace;color:#f7f5ef">
-<p style="margin:0 0 16px;font-size:11px;letter-spacing:1.3px;color:#ff9b66;font-weight:bold">{kicker}</p>
+{kicker_markup}
 <h1 class="headline" style="margin:0 0 28px;font:700 40px/1.15 'Courier New',monospace;letter-spacing:-1.4px;color:#f7f5ef">{title}</h1>
 {body}
 <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin-top:30px;border-top:1px solid #565656"><tr><td style="padding-top:22px;font:14px/1.7 'Courier New',monospace;color:#ccc"><strong style="color:#fff">L’equip de LleidaHack</strong></td><td width="68" style="padding-top:16px"><img src="$_static_folder/hackeps-2026/hacker.png" width="64" alt="" style="display:block;width:64px;height:auto;border:0"></td></tr></table>
@@ -40,16 +154,49 @@ for key,subject,kicker,title,body,reason in items:
 <tr><td bgcolor="#ff7430" align="center" style="padding:22px;color:#232323;font:700 13px/1.8 'Courier New',monospace"><a href="https://www.instagram.com/lleidahack/" style="color:#232323">Instagram</a> &nbsp; / &nbsp; <a href="https://www.linkedin.com/company/lleidahack/" style="color:#232323">LinkedIn</a> &nbsp; / &nbsp; <a href="https://x.com/lleidahack" style="color:#232323">X</a></td></tr>
 <tr><td align="center" style="padding:22px 24px;font:12px/1.7 'Courier New',monospace;color:#bcbcbc">{reason}<br>Necessites ajuda? <a href="mailto:$_contact_mail" style="color:#ffb48c">$_contact_mail</a></td></tr>
 </table></td></tr></table></body></html>'''
- (root/'templates'/f'{key}.html').write_text(text)
- sample={'name':'Laia','event_name':'HackEPS 2026','days_left':'5','token':'preview-token','email':'laia@example.test','title':'Una pregunta sobre els equips','message':'Hola! Podem participar amb persones de diferents universitats? Moltes gràcies!','slack_url':'https://example.test/slack','code':'ABCDEFGHJKLMNPQRSTUV','qr_url':'https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=ABCDEFGHJKLMNPQRSTUV','_front_link':'https://example.test','_contact_mail':'contacte@lleidahack.dev','_static_folder':'../assets'}
- rendered=Template(text).substitute(sample).replace('../assets/hackeps-2026/','../assets/')
- (root/'previews'/f'{key}.html').write_text(rendered)
-original=root.parents[1]/'src/utils/internal_templates/initial_templates'
-for key,*_ in items:
- if not (original/f'{key}.html').exists(): continue
- before=[x for x in Template((original/f'{key}.html').read_text()).get_identifiers() if not x.startswith('_')]
- after=[x for x in Template((root/'templates'/f'{key}.html').read_text()).get_identifiers() if not x.startswith('_')]
- assert before==after,(key,before,after)
+    (root / 'templates' / f'{key}.html').write_text(text)
+    sample = {
+        'company_name': 'Empresa Exemple',
+        'registration_url': 'https://example.test/register',
+        'name': 'Laia',
+        'event_name': 'HackEPS 2026',
+        'days_left': '5',
+        'token': 'preview-token',
+        'email': 'laia@example.test',
+        'title': 'Una pregunta sobre els equips',
+        'message':
+        'Hola! Podem participar amb persones de diferents universitats? Moltes gràcies!',
+        'slack_url': 'https://example.test/slack',
+        'code': 'ABCDEFGHJKLMNPQRSTUV',
+        'qr_url':
+        'https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=ABCDEFGHJKLMNPQRSTUV',
+        '_front_link': 'https://example.test',
+        '_contact_mail': 'contacte@lleidahack.dev',
+        '_static_folder': '../assets'
+    }
+    rendered = Template(text).substitute(sample).replace(
+        '../assets/hackeps-2026/', '../assets/')
+    (root / 'previews' / f'{key}.html').write_text(rendered)
+original = root.parents[1] / 'src/utils/internal_templates/initial_templates'
+for key, *_ in items:
+    if not (original / f'{key}.html').exists(): continue
+    before = [
+        x for x in Template((original /
+                             f'{key}.html').read_text()).get_identifiers()
+        if not x.startswith('_')
+    ]
+    after = [
+        x for x in Template((root / 'templates' /
+                             f'{key}.html').read_text()).get_identifiers()
+        if not x.startswith('_')
+    ]
+    assert before == after, (key, before, after)
 print('Validated variable order for all existing templates.')
-buttons=''.join(f'<button data-template="{key}" onclick="selectTemplate(this)"><span>{i+1:02}</span>{subject}</button>' for i,(key,subject,*_) in enumerate(items))
-(root/'index.html').write_text('''<!doctype html><html lang="ca"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>HackEPS · Proposta de correus</title><style>*{box-sizing:border-box}body{margin:0;background:#eee8e0;color:#292929;font-family:'Courier New',monospace}header{padding:28px 32px;border-bottom:1px solid #c5bfb6;display:flex;justify-content:space-between;gap:24px;align-items:center}header h1{margin:0;font-size:24px}header p{margin:8px 0 0;font-size:13px}.tag{background:#ff7430;padding:8px 12px;font-weight:bold;font-size:12px}main{display:grid;grid-template-columns:300px 1fr;min-height:calc(100vh - 106px)}nav{padding:28px 20px;border-right:1px solid #c5bfb6}nav button{display:flex;gap:14px;background:transparent;border:0;text-align:left;width:100%;padding:16px 12px;font:14px 'Courier New';cursor:pointer;border-radius:4px}nav button span{color:#817b74}nav button.active{background:#2e2e2e;color:white}nav button.active span{color:#ff9b66}.preview{padding:22px 24px}.toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;font-size:12px}.toolbar button{background:white;border:1px solid #b6b0a8;padding:9px 12px;cursor:pointer}.toolbar a{color:#292929}iframe{display:block;width:100%;max-width:760px;height:1120px;margin:auto;border:0;background:#202020;box-shadow:0 8px 32px #0001}.note{font-size:12px;line-height:1.8;margin:32px 12px;color:#69635c}@media(max-width:800px){header{padding:20px;display:block}.tag{display:inline-block;margin-top:16px}main{display:block}nav{border:0;display:flex;overflow:auto;padding:10px}nav button{min-width:210px}.note{display:none}.preview{padding:12px 0}.toolbar{padding:0 12px}}</style><header><div><h1>Els correus també fan HackEPS.</h1><p>Proposta visual · 9 moments del recorregut del hacker</p></div><div class="tag">10a EDICIÓ / 2026</div></header><main><nav><div>'''+buttons+'''</div><p class="note">Una mateixa identitat.<br>Una acció clara a cada correu.<br><br>Fons carbó, cel blau i taronja. El Marraco acompanya; el missatge mana.<br><br>Previsualització amb dades fictícies. No s’envia cap correu.</p></nav><section class="preview"><div class="toolbar"><div><button onclick="resizePreview(760)">Escriptori</button><button onclick="resizePreview(375)">Mòbil</button></div><a id="open" target="_blank" href="previews/user_created.html">Obre el correu ↗</a></div><iframe title="Previsualització del correu" id="email" src="previews/user_created.html"></iframe></section></main><script>function selectTemplate(button){document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b===button));const url='previews/'+button.dataset.template+'.html';document.getElementById('email').src=url;document.getElementById('open').href=url}function resizePreview(width){document.getElementById('email').style.maxWidth=width+'px'}selectTemplate(document.querySelector('nav button'));</script></html>''')
+buttons = ''.join(
+    f'<button data-template="{key}" onclick="selectTemplate(this)"><span>{i+1:02}</span>{subject}</button>'
+    for i, (key, subject, *_) in enumerate(items))
+(root / 'index.html').write_text(
+    '''<!doctype html><html lang="ca"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>HackEPS · Proposta de correus</title><style>*{box-sizing:border-box}body{margin:0;background:#eee8e0;color:#292929;font-family:'Courier New',monospace}header{padding:28px 32px;border-bottom:1px solid #c5bfb6;display:flex;justify-content:space-between;gap:24px;align-items:center}header h1{margin:0;font-size:24px}header p{margin:8px 0 0;font-size:13px}.tag{background:#ff7430;padding:8px 12px;font-weight:bold;font-size:12px}main{display:grid;grid-template-columns:300px 1fr;min-height:calc(100vh - 106px)}nav{padding:28px 20px;border-right:1px solid #c5bfb6}nav button{display:flex;gap:14px;background:transparent;border:0;text-align:left;width:100%;padding:16px 12px;font:14px 'Courier New';cursor:pointer;border-radius:4px}nav button span{color:#817b74}nav button.active{background:#2e2e2e;color:white}nav button.active span{color:#ff9b66}.preview{padding:22px 24px}.toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;font-size:12px}.toolbar button{background:white;border:1px solid #b6b0a8;padding:9px 12px;cursor:pointer}.toolbar a{color:#292929}iframe{display:block;width:100%;max-width:760px;height:1120px;margin:auto;border:0;background:#202020;box-shadow:0 8px 32px #0001}.note{font-size:12px;line-height:1.8;margin:32px 12px;color:#69635c}@media(max-width:800px){header{padding:20px;display:block}.tag{display:inline-block;margin-top:16px}main{display:block}nav{border:0;display:flex;overflow:auto;padding:10px}nav button{min-width:210px}.note{display:none}.preview{padding:12px 0}.toolbar{padding:0 12px}}</style><header><div><h1>Els correus també fan HackEPS.</h1><p>Proposta visual · 11 correus per a la comunitat HackEPS</p></div><div class="tag">10a EDICIÓ / 2026</div></header><main><nav><div>'''
+    + buttons +
+    '''</div><p class="note">Una mateixa identitat.<br>Una acció clara a cada correu.<br><br>Fons carbó, cel blau i taronja. El Marraco acompanya; el missatge mana.<br><br>Previsualització amb dades fictícies. No s’envia cap correu.</p></nav><section class="preview"><div class="toolbar"><div><button onclick="resizePreview(760)">Escriptori</button><button onclick="resizePreview(375)">Mòbil</button></div><a id="open" target="_blank" href="previews/user_created.html">Obre el correu ↗</a></div><iframe title="Previsualització del correu" id="email" src="previews/user_created.html"></iframe></section></main><script>function selectTemplate(button){document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b===button));const url='previews/'+button.dataset.template+'.html';document.getElementById('email').src=url;document.getElementById('open').href=url}function resizePreview(width){document.getElementById('email').style.maxWidth=width+'px'}selectTemplate(document.querySelector('nav button'));</script></html>'''
+)
