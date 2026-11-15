@@ -109,13 +109,13 @@ items = [
     ('company_account_invite', 'Creeu el vostre compte d’usuari', '',
      'Ens preparem<br>per a la HackEPS.',
      p('Hola, equip de <strong>$company_name</strong>!') +
-     p('Per preparar la vostra participació a la HackEPS, us demanem que creeu un compte d’usuari a la web de LleidaHack.'
-       ) + action('Crea un compte d’usuari', '$registration_url') +
-     p('Completeu el registre i verifiqueu el correu electrònic amb l’enllaç que rebreu.'
+     p('Per preparar la vostra participació a la HackEPS, activeu el vostre compte al portal d’empreses.'
+       ) + action('Activa el compte d’empresa', '$registration_url') +
+     p('Obriu l’enllaç i escolliu una contrasenya. Després podreu accedir al portal amb aquest correu i la contrasenya que hàgiu creat. L’enllaç és personal i caduca al cap de 48 hores.'
        ) +
      note(
          'Ja teniu un compte?',
-         'No cal que en creeu un altre. Si teniu cap dubte, responeu a l’equip de LleidaHack a través del correu de contacte que trobareu al peu.'
+         'Aquest mateix enllaç us permet establir una nova contrasenya per al compte d’empresa. Si teniu cap dubte, contacteu amb l’equip de LleidaHack.'
      ),
      'Has rebut aquest correu com a contacte d’una empresa participant a la HackEPS.'
      ),
