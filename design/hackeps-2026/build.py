@@ -9,6 +9,10 @@ def action(label, url):
     return f'''<table role="presentation" cellspacing="0" cellpadding="0" style="margin:28px 0;width:100%"><tr><td bgcolor="#ff7430" align="center" style="border-radius:4px"><a href="{url}" style="display:block;padding:18px 20px;border:1px solid #ff7430;border-radius:4px;font:700 16px 'Courier New',monospace;color:#232323;text-decoration:none">{label} &nbsp;↗</a></td></tr></table>'''
 
 
+def wallet_badge(label, url, asset, width, height):
+    return f'''<table role="presentation" cellspacing="0" cellpadding="0" style="margin:16px 0"><tr><td><a href="{url}" style="display:inline-block;color:#f7f5ef;text-decoration:none"><img src="$_static_folder/hackeps-2026/{asset}" alt="{label}" width="{width}" height="{height}" style="display:block;width:{width}px;height:{height}px;max-width:100%;border:0"></a></td></tr></table>'''
+
+
 def note(title, body):
     return f'<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin:24px 0"><tr><td bgcolor="#393939" style="padding:18px 20px;border-left:3px solid #ff7430"><strong style="color:#ffb48c">{title}</strong><br>{body}</td></tr></table>'
 
@@ -17,8 +21,9 @@ def p(text):
     return f'<p style="margin:0 0 18px">{text}</p>'
 
 
-def qr(alt_code, url, code):
-    return f'''<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin:24px 0"><tr><td align="center" bgcolor="#f7f5ef" style="padding:24px 20px;border-radius:6px"><img alt="Codi QR del tiquet {alt_code}" src="{url}" width="220" height="220" style="display:block;width:220px;height:220px;border:0;margin:0 auto"><p style="margin:16px 0 0;font:700 18px/1.4 'Courier New',monospace;letter-spacing:2px;color:#232323">{code}</p><p style="margin:4px 0 0;font:12px/1.6 'Courier New',monospace;color:#69635c">Si el QR no es veu, ensenya aquest codi.</p></td></tr></table>'''
+def qr(alt_code, url, code, show_hint=True):
+    hint = '<p style="margin:4px 0 0;font:12px/1.6 \'Courier New\',monospace;color:#69635c">Si el QR no es veu, ensenya aquest codi.</p>' if show_hint else ''
+    return f'''<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin:24px 0"><tr><td align="center" bgcolor="#f7f5ef" style="padding:24px 20px;border-radius:6px"><img alt="Codi QR del tiquet {alt_code}" src="{url}" width="220" height="220" style="display:block;width:220px;height:220px;border:0;margin:0 auto"><p style="margin:16px 0 0;font:700 18px/1.4 'Courier New',monospace;letter-spacing:2px;color:#232323">{code}</p>{hint}</td></tr></table>'''
 
 
 items = [
@@ -100,6 +105,18 @@ items = [
          'El tiquet és personal. Si el perds, també el trobaràs al teu perfil de la web.'
      ) + action('Veure el meu tiquet', '$_front_link/perfil'),
      'Has rebut aquest correu perquè tens una plaça confirmada a la HackEPS.'),
+    ('event_hacker_ticket_reminder', 'Falta poc! Guarda la teva entrada', '',
+     'La teva entrada', p('Hola, <strong>$name</strong>!') +
+     p('D’aquí a pocs dies ens veiem a <strong>$event_name</strong>. Ja tens la plaça confirmada: guarda aquesta entrada i ensenya el QR al check-in.'
+       ) + qr('$code', '$qr_url', '$code', show_hint=False) +
+     wallet_badge('Add to Apple Wallet', '$apple_wallet_url',
+                  'add-to-apple-wallet.png', 151, 47) +
+     wallet_badge('Add to Google Wallet', '$google_wallet_url',
+                  'add-to-google-wallet.png', 283, 50) +
+     p('També trobaràs el QR de la teva entrada al <a href="$_front_link/perfil" style="color:#ffb48c">teu perfil</a>.'
+       ) + p('Ens veiem ben aviat!'),
+     'Has rebut aquest recordatori perquè tens una plaça confirmada a la HackEPS.'
+     ),
     ('contact', 'Nou missatge de contacte', 'BÚSTIA DE L’ORGANITZACIÓ',
      'Tenim<br>un missatge.',
      p('<strong>$name</strong> ens ha escrit des de <strong>$email</strong>.')
@@ -156,6 +173,10 @@ for key, subject, kicker, title, body, reason in items:
 </table></td></tr></table></body></html>'''
     (root / 'templates' / f'{key}.html').write_text(text)
     sample = {
+        'apple_wallet_url':
+        'https://example.test/tickets/preview-ticket/apple.pkpass',
+        'google_wallet_url':
+        'https://example.test/tickets/preview-ticket/google-wallet',
         'company_name': 'Empresa Exemple',
         'registration_url': 'https://example.test/register',
         'name': 'Laia',
@@ -196,7 +217,7 @@ buttons = ''.join(
     f'<button data-template="{key}" onclick="selectTemplate(this)"><span>{i+1:02}</span>{subject}</button>'
     for i, (key, subject, *_) in enumerate(items))
 (root / 'index.html').write_text(
-    '''<!doctype html><html lang="ca"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>HackEPS · Proposta de correus</title><style>*{box-sizing:border-box}body{margin:0;background:#eee8e0;color:#292929;font-family:'Courier New',monospace}header{padding:28px 32px;border-bottom:1px solid #c5bfb6;display:flex;justify-content:space-between;gap:24px;align-items:center}header h1{margin:0;font-size:24px}header p{margin:8px 0 0;font-size:13px}.tag{background:#ff7430;padding:8px 12px;font-weight:bold;font-size:12px}main{display:grid;grid-template-columns:300px 1fr;min-height:calc(100vh - 106px)}nav{padding:28px 20px;border-right:1px solid #c5bfb6}nav button{display:flex;gap:14px;background:transparent;border:0;text-align:left;width:100%;padding:16px 12px;font:14px 'Courier New';cursor:pointer;border-radius:4px}nav button span{color:#817b74}nav button.active{background:#2e2e2e;color:white}nav button.active span{color:#ff9b66}.preview{padding:22px 24px}.toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;font-size:12px}.toolbar button{background:white;border:1px solid #b6b0a8;padding:9px 12px;cursor:pointer}.toolbar a{color:#292929}iframe{display:block;width:100%;max-width:760px;height:1120px;margin:auto;border:0;background:#202020;box-shadow:0 8px 32px #0001}.note{font-size:12px;line-height:1.8;margin:32px 12px;color:#69635c}@media(max-width:800px){header{padding:20px;display:block}.tag{display:inline-block;margin-top:16px}main{display:block}nav{border:0;display:flex;overflow:auto;padding:10px}nav button{min-width:210px}.note{display:none}.preview{padding:12px 0}.toolbar{padding:0 12px}}</style><header><div><h1>Els correus també fan HackEPS.</h1><p>Proposta visual · 11 correus per a la comunitat HackEPS</p></div><div class="tag">10a EDICIÓ / 2026</div></header><main><nav><div>'''
+    '''<!doctype html><html lang="ca"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>HackEPS · Proposta de correus</title><style>*{box-sizing:border-box}body{margin:0;background:#eee8e0;color:#292929;font-family:'Courier New',monospace}header{padding:28px 32px;border-bottom:1px solid #c5bfb6;display:flex;justify-content:space-between;gap:24px;align-items:center}header h1{margin:0;font-size:24px}header p{margin:8px 0 0;font-size:13px}.tag{background:#ff7430;padding:8px 12px;font-weight:bold;font-size:12px}main{display:grid;grid-template-columns:300px 1fr;min-height:calc(100vh - 106px)}nav{padding:28px 20px;border-right:1px solid #c5bfb6}nav button{display:flex;gap:14px;background:transparent;border:0;text-align:left;width:100%;padding:16px 12px;font:14px 'Courier New';cursor:pointer;border-radius:4px}nav button span{color:#817b74}nav button.active{background:#2e2e2e;color:white}nav button.active span{color:#ff9b66}.preview{padding:22px 24px}.toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;font-size:12px}.toolbar button{background:white;border:1px solid #b6b0a8;padding:9px 12px;cursor:pointer}.toolbar a{color:#292929}iframe{display:block;width:100%;max-width:760px;height:1120px;margin:auto;border:0;background:#202020;box-shadow:0 8px 32px #0001}.note{font-size:12px;line-height:1.8;margin:32px 12px;color:#69635c}@media(max-width:800px){header{padding:20px;display:block}.tag{display:inline-block;margin-top:16px}main{display:block}nav{border:0;display:flex;overflow:auto;padding:10px}nav button{min-width:210px}.note{display:none}.preview{padding:12px 0}.toolbar{padding:0 12px}}</style><header><div><h1>Els correus també fan HackEPS.</h1><p>Proposta visual · 12 correus per a la comunitat HackEPS</p></div><div class="tag">10a EDICIÓ / 2026</div></header><main><nav><div>'''
     + buttons +
     '''</div><p class="note">Una mateixa identitat.<br>Una acció clara a cada correu.<br><br>Fons carbó, cel blau i taronja. El Marraco acompanya; el missatge mana.<br><br>Previsualització amb dades fictícies. No s’envia cap correu.</p></nav><section class="preview"><div class="toolbar"><div><button onclick="resizePreview(760)">Escriptori</button><button onclick="resizePreview(375)">Mòbil</button></div><a id="open" target="_blank" href="previews/user_created.html">Obre el correu ↗</a></div><iframe title="Previsualització del correu" id="email" src="previews/user_created.html"></iframe></section></main><script>function selectTemplate(button){document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b===button));const url='previews/'+button.dataset.template+'.html';document.getElementById('email').src=url;document.getElementById('open').href=url}function resizePreview(width){document.getElementById('email').style.maxWidth=width+'px'}selectTemplate(document.querySelector('nav button'));</script></html>'''
 )

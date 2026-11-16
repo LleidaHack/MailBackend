@@ -1,6 +1,6 @@
 # HackEPS 2026 email design proposal
 
-Open index.html to compare eleven email previews at desktop and mobile widths.
+Open index.html to compare twelve email previews at desktop and mobile widths.
 Templates contain existing backend variables; previews contain fictional examples.
 This folder is not loaded by the mail service. No emails have been sent.
 
@@ -11,7 +11,7 @@ animation support keep the PNG clouds visible and static. Reduced motion is resp
 
 Run `python3 build.py` with Python 3.12+ to regenerate drafts and previews. It checks variable names
 and first-occurrence order against the originals: the current renderer consumes
-positional comma-separated values. No new per-message fields are required.
+positional comma-separated values. Existing templates retain their per-message fields; new templates are documented below.
 
 For later integration, publish assets under the configured static folder at
 `hackeps-2026/hackeps-logo.png`, `hackeps-2026/hacker.png`,
@@ -42,3 +42,44 @@ reminder uses the existing `/assistance?confirm=false&token=…` flow; provide e
 participant's own assistance token. Participants who will attend need take no
 action. Subjects are supplied by the caller, separately from the HTML template.
 Adding these templates does not queue or send any messages.
+
+## Pre-event ticket reminder with Wallet links
+
+`event_hacker_ticket_reminder` is a separate template, so callers of the original
+`event_hacker_ticket` keep their existing field contract. Install it in existing
+databases with migration `20261116_ticket_reminder` (`alembic upgrade head`).
+Suggested subject: **Falta poc! Guarda la teva entrada · HackEPS**.
+
+Supply these positional fields in exactly this order:
+
+1. `name`: participant name.
+2. `event_name`: event name.
+3. `code`: personal check-in code (also shown if images are blocked).
+4. `qr_url`: HTTPS URL of the participant’s QR image.
+5. `apple_wallet_url`: personal URL that downloads a signed Apple Wallet `.pkpass`.
+6. `google_wallet_url`: personal Google Wallet save link.
+
+The caller must provide valid passes for the same ticket as the QR. This service
+only renders links; it does not generate, sign or issue Wallet passes. Both links
+are required. Use HTML-escaped values (including `&amp;` in URL query strings),
+percent-encode literal commas in URLs and avoid commas in the other positional
+fields because the existing mail API uses comma-separated values.
+
+Queue this template for confirmed attendees a few days before the event from the
+system that owns event dates (for example, three days before; this is a suggested
+policy, not a configured schedule). Resolve its template ID by name rather than
+hard-coding a database ID. The caller supplies the subject and receiver separately
+and should prevent duplicate reminders. MailBackend has no date-based scheduler;
+creating mail adds it to the regular queue, so do so only when it is due.
+
+No mail is queued by adding or migrating this template. Preview Wallet URLs are
+fictional and do not issue passes. Real Wallet flows and email-client rendering
+must be verified with issued passes before sending.
+
+Wallet badge assets: `add-to-apple-wallet.png` is cropped from the user-supplied
+reference (16 November 2026), with the surrounding background removed.
+`add-to-google-wallet.png` is the English wallet button from Google's official
+https://developers.google.com/static/wallet/download-assets/add-to-wallet-png.zip.
+Both assets are mirrored under `src/static/images/hackeps-2026` and must be
+published alongside the existing email images. The reminder also links to
+`$_front_link/perfil`, where participants can retrieve their QR.
