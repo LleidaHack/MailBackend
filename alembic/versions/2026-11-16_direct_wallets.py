@@ -11,10 +11,8 @@ depends_on = None
 
 
 def upgrade():
-    root = (
-        Path(__file__).resolve().parents[2]
-        / "src/utils/internal_templates/initial_templates"
-    )
+    root = (Path(__file__).resolve().parents[2] /
+            "src/utils/internal_templates/initial_templates")
     for name in ("event_attendee_ticket", "event_attendee_ticket_wallets"):
         values = {
             "name": name,

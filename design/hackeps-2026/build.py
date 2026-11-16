@@ -165,12 +165,14 @@ items = [
 ]
 # Same six-field contract; only select the two-wallet version when Google is enabled.
 attendee = next(item for item in items if item[0] == 'event_attendee_ticket')
-items.append(('event_attendee_ticket_wallets', *attendee[1:4],
-              attendee[4].replace(p('<a href="$ticket_url" style="color:#ffb48c">Obrir la meva entrada</a>'),
-                                  wallet_badge('Add to Google Wallet', '$ticket_url/google-wallet',
-                                               'add-to-google-wallet.png', 283, 50) +
-                                  p('<a href="$ticket_url" style="color:#ffb48c">Obrir la meva entrada</a>')),
-              attendee[5]))
+items.append(
+    ('event_attendee_ticket_wallets', *attendee[1:4], attendee[4].replace(
+        p('<a href="$ticket_url" style="color:#ffb48c">Obrir la meva entrada</a>'
+          ),
+        wallet_badge('Add to Google Wallet', '$ticket_url/google-wallet',
+                     'add-to-google-wallet.png', 283, 50) +
+        p('<a href="$ticket_url" style="color:#ffb48c">Obrir la meva entrada</a>'
+          )), attendee[5]))
 for key, subject, kicker, title, body, reason in items:
     kicker_markup = f'<p style="margin:0 0 16px;font-size:11px;letter-spacing:1.3px;color:#ff9b66;font-weight:bold">{kicker}</p>' if kicker else ''
     text = f'''<!doctype html>
