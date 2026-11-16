@@ -109,7 +109,7 @@ items = [
      p('Hola, <strong>$name</strong>!') +
      p('T’esperem a <strong>$event_name</strong> com a <strong>$role</strong>. Guarda aquest QR i mostra’l al check-in per recollir la teva acreditació.'
        ) + qr('$code', '$qr_url', '$code', show_hint=False) +
-     wallet_badge('Add to Apple Wallet', '$ticket_url',
+     wallet_badge('Add to Apple Wallet', '$ticket_url/apple.pkpass',
                   'add-to-apple-wallet.png', 151, 47) +
      p('<a href="$ticket_url" style="color:#ffb48c">Obrir la meva entrada</a>')
      +
@@ -163,6 +163,16 @@ items = [
      ) + p('Gràcies per avisar-nos i ajudar-nos a fer lloc a més hackers!'),
      'Has rebut aquest recordatori perquè t’has inscrit a la HackEPS.'),
 ]
+# Same six-field contract; only select the two-wallet version when Google is enabled.
+attendee = next(item for item in items if item[0] == 'event_attendee_ticket')
+items.append(
+    ('event_attendee_ticket_wallets', *attendee[1:4], attendee[4].replace(
+        p('<a href="$ticket_url" style="color:#ffb48c">Obrir la meva entrada</a>'
+          ),
+        wallet_badge('Add to Google Wallet', '$ticket_url/google-wallet',
+                     'add-to-google-wallet.png', 283, 50) +
+        p('<a href="$ticket_url" style="color:#ffb48c">Obrir la meva entrada</a>'
+          )), attendee[5]))
 for key, subject, kicker, title, body, reason in items:
     kicker_markup = f'<p style="margin:0 0 16px;font-size:11px;letter-spacing:1.3px;color:#ff9b66;font-weight:bold">{kicker}</p>' if kicker else ''
     text = f'''<!doctype html>

@@ -14,6 +14,7 @@ class InternalTemplates(Enum):
     EVENT_HACKER_ACCEPTED = 'event_hacker_accepted'
 
     EVENT_HACKER_REMINDER = "event_hacker_reminder"
+    EVENT_ATTENDEE_TICKET_WALLETS = "event_attendee_ticket_wallets"
     EVENT_ATTENDEE_TICKET = "event_attendee_ticket"
     EVENT_HACKER_TICKET = "event_hacker_ticket"
     EVENT_HACKER_TICKET_REMINDER = "event_hacker_ticket_reminder"
