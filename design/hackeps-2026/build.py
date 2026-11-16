@@ -96,7 +96,7 @@ items = [
      p('Presenta’t, comparteix idees i comença a conèixer la resta de hackers.'
        ),
      'Has rebut aquesta invitació com a participant de la comunitat HackEPS.'),
-    ('event_hacker_ticket', 'El teu tiquet de check-in', '05 / TOT A PUNT',
+    ('event_hacker_ticket', 'La teva entrada', '05 / TOT A PUNT',
      'Aquest és<br>el teu tiquet.', p('Hola, <strong>$name</strong>!') +
      p('Ja tens plaça confirmada a <strong>$event_name</strong>. Aquest QR és el teu tiquet d’entrada: ensenya’l al check-in i et donarem la teva acreditació.'
        ) + qr('$code', '$qr_url', '$code') +
