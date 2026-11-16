@@ -10,11 +10,18 @@ depends_on = None
 
 
 def upgrade():
-    root = Path(__file__).resolve().parents[2] / "src/utils/internal_templates/initial_templates"
-    for name in ("event_attendee_ticket", "event_hacker_ticket_reminder", "event_hacker_ticket"):
+    root = Path(__file__).resolve(
+    ).parents[2] / "src/utils/internal_templates/initial_templates"
+    for name in ("event_attendee_ticket", "event_hacker_ticket_reminder",
+                 "event_hacker_ticket"):
         markup = (root / f"{name}.html").read_text(encoding="utf-8")
-        op.get_bind().execute(sa.text("UPDATE template SET html = :html WHERE name = :name AND internal = true"),
-                              {"html": markup, "name": name})
+        op.get_bind().execute(
+            sa.text(
+                "UPDATE template SET html = :html WHERE name = :name AND internal = true"
+            ), {
+                "html": markup,
+                "name": name
+            })
 
 
 def downgrade():

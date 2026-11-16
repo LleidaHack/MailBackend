@@ -111,7 +111,8 @@ items = [
        ) + qr('$code', '$qr_url', '$code', show_hint=False) +
      wallet_badge('Add to Apple Wallet', '$ticket_url',
                   'add-to-apple-wallet.png', 151, 47) +
-     p('<a href="$ticket_url" style="color:#ffb48c">Obrir la meva entrada</a>') +
+     p('<a href="$ticket_url" style="color:#ffb48c">Obrir la meva entrada</a>')
+     +
      p('No cal iniciar sessió per obrir la teva entrada. L’enllaç és personal: no el comparteixis.'
        ),
      'Has rebut aquesta entrada com a participant confirmat, mentor o membre del staff de l’esdeveniment.'
