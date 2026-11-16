@@ -11,10 +11,8 @@ depends_on = None
 def upgrade():
     # Preserve template IDs, custom content and all queued/historical references.
     op.get_bind().execute(
-        sa.text(
-            "UPDATE template SET html = REPLACE(html, :old, :new) "
-            "WHERE name = :name AND internal = true"
-        ),
+        sa.text("UPDATE template SET html = REPLACE(html, :old, :new) "
+                "WHERE name = :name AND internal = true"),
         {
             "old": "El teu tiquet de check-in",
             "new": "La teva entrada",
