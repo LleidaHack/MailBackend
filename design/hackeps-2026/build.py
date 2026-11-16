@@ -111,7 +111,8 @@ items = [
        ) + qr('$code', '$qr_url', '$code', show_hint=False) +
      wallet_badge('Add to Apple Wallet', '$ticket_url/apple.pkpass',
                   'add-to-apple-wallet.png', 151, 47) +
-     p('L’entrada és personal: no comparteixis el QR ni els enllaços de Wallet.'),
+     p('L’entrada és personal: no comparteixis el QR ni els enllaços de Wallet.'
+       ),
      'Has rebut aquesta entrada com a participant confirmat, mentor o membre del staff de l’esdeveniment.'
      ),
     ('event_hacker_ticket_reminder', 'Falta poc! Guarda la teva entrada', '',
@@ -166,9 +167,9 @@ apple_badge = wallet_badge('Add to Apple Wallet', '$ticket_url/apple.pkpass',
                            'add-to-apple-wallet.png', 151, 47)
 items.append(
     ('event_attendee_ticket_wallets', *attendee[1:4], attendee[4].replace(
-        apple_badge,
-        apple_badge + wallet_badge('Add to Google Wallet', '$ticket_url/google-wallet',
-                                   'add-to-google-wallet.png', 283, 50)), attendee[5]))
+        apple_badge, apple_badge +
+        wallet_badge('Add to Google Wallet', '$ticket_url/google-wallet',
+                     'add-to-google-wallet.png', 283, 50)), attendee[5]))
 for key, subject, kicker, title, body, reason in items:
     kicker_markup = f'<p style="margin:0 0 16px;font-size:11px;letter-spacing:1.3px;color:#ff9b66;font-weight:bold">{kicker}</p>' if kicker else ''
     text = f'''<!doctype html>
