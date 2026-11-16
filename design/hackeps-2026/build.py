@@ -22,8 +22,8 @@ def p(text):
 
 
 def qr(alt_code, url, code, show_hint=True):
-    hint = '<p style="margin:4px 0 0;font:12px/1.6 \'Courier New\',monospace;color:#69635c">Si el QR no es veu, ensenya aquest codi.</p>' if show_hint else ''
-    return f'''<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin:24px 0"><tr><td align="center" bgcolor="#f7f5ef" style="padding:24px 20px;border-radius:6px"><img alt="Codi QR del tiquet {alt_code}" src="{url}" width="220" height="220" style="display:block;width:220px;height:220px;border:0;margin:0 auto"><p style="margin:16px 0 0;font:700 18px/1.4 'Courier New',monospace;letter-spacing:2px;color:#232323">{code}</p>{hint}</td></tr></table>'''
+    # Preserve the positional mail field order without displaying the bearer code.
+    return f'''<!-- Ticket reference: {code} --><table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin:24px 0"><tr><td align="center" bgcolor="#f7f5ef" style="padding:24px 20px;border-radius:6px"><img alt="QR personal d’entrada" src="{url}" width="220" height="220" style="display:block;width:220px;height:220px;border:0;margin:0 auto"></td></tr></table>'''
 
 
 items = [
@@ -109,7 +109,10 @@ items = [
      p('Hola, <strong>$name</strong>!') +
      p('T’esperem a <strong>$event_name</strong> com a <strong>$role</strong>. Guarda aquest QR i mostra’l al check-in per recollir la teva acreditació.'
        ) + qr('$code', '$qr_url', '$code', show_hint=False) +
-     action('Obrir l’entrada i afegir-la a Wallet', '$ticket_url') +
+     wallet_badge('Add to Apple Wallet', '$ticket_url',
+                  'add-to-apple-wallet.png', 151, 47) +
+     p('<a href="$ticket_url" style="color:#ffb48c">Obrir la meva entrada</a>')
+     +
      p('No cal iniciar sessió per obrir la teva entrada. L’enllaç és personal: no el comparteixis.'
        ),
      'Has rebut aquesta entrada com a participant confirmat, mentor o membre del staff de l’esdeveniment.'
@@ -183,7 +186,7 @@ for key, subject, kicker, title, body, reason in items:
     (root / 'templates' / f'{key}.html').write_text(text)
     sample = {
         'role': 'Mentor',
-        'ticket_url': 'https://example.test/v1/event/1/ticket/DEMO/view',
+        'ticket_url': 'https://hackeps.dev/entrada/1/DEMO',
         'apple_wallet_url':
         'https://example.test/tickets/preview-ticket/apple.pkpass',
         'google_wallet_url':
