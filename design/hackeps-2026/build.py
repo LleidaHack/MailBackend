@@ -105,6 +105,15 @@ items = [
          'El tiquet és personal. Si el perds, també el trobaràs al teu perfil de la web.'
      ) + action('Veure el meu tiquet', '$_front_link/perfil'),
      'Has rebut aquest correu perquè tens una plaça confirmada a la HackEPS.'),
+    ('event_attendee_ticket', 'La teva entrada', '', 'La teva entrada',
+     p('Hola, <strong>$name</strong>!') +
+     p('T’esperem a <strong>$event_name</strong> com a <strong>$role</strong>. Guarda aquest QR i mostra’l al check-in per recollir la teva acreditació.'
+       ) + qr('$code', '$qr_url', '$code', show_hint=False) +
+     action('Obrir l’entrada i afegir-la a Wallet', '$ticket_url') +
+     p('No cal iniciar sessió per obrir la teva entrada. L’enllaç és personal: no el comparteixis.'
+       ),
+     'Has rebut aquesta entrada com a participant confirmat, mentor o membre del staff de l’esdeveniment.'
+     ),
     ('event_hacker_ticket_reminder', 'Falta poc! Guarda la teva entrada', '',
      'La teva entrada', p('Hola, <strong>$name</strong>!') +
      p('D’aquí a pocs dies ens veiem a <strong>$event_name</strong>. Ja tens la plaça confirmada: guarda aquesta entrada i ensenya el QR al check-in.'
@@ -173,6 +182,8 @@ for key, subject, kicker, title, body, reason in items:
 </table></td></tr></table></body></html>'''
     (root / 'templates' / f'{key}.html').write_text(text)
     sample = {
+        'role': 'Mentor',
+        'ticket_url': 'https://example.test/v1/event/1/ticket/DEMO/view',
         'apple_wallet_url':
         'https://example.test/tickets/preview-ticket/apple.pkpass',
         'google_wallet_url':
