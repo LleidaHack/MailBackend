@@ -96,7 +96,7 @@ items = [
      p('Presenta’t, comparteix idees i comença a conèixer la resta de hackers.'
        ),
      'Has rebut aquesta invitació com a participant de la comunitat HackEPS.'),
-    ('event_hacker_ticket', 'El teu tiquet de check-in', '05 / TOT A PUNT',
+    ('event_hacker_ticket', 'La teva entrada', '05 / TOT A PUNT',
      'Aquest és<br>el teu tiquet.', p('Hola, <strong>$name</strong>!') +
      p('Ja tens plaça confirmada a <strong>$event_name</strong>. Aquest QR és el teu tiquet d’entrada: ensenya’l al check-in i et donarem la teva acreditació.'
        ) + qr('$code', '$qr_url', '$code') +
@@ -111,9 +111,7 @@ items = [
        ) + qr('$code', '$qr_url', '$code', show_hint=False) +
      wallet_badge('Add to Apple Wallet', '$ticket_url/apple.pkpass',
                   'add-to-apple-wallet.png', 151, 47) +
-     p('<a href="$ticket_url" style="color:#ffb48c">Obrir la meva entrada</a>')
-     +
-     p('No cal iniciar sessió per obrir la teva entrada. L’enllaç és personal: no el comparteixis.'
+     p('L’entrada és personal: no comparteixis el QR ni els enllaços de Wallet.'
        ),
      'Has rebut aquesta entrada com a participant confirmat, mentor o membre del staff de l’esdeveniment.'
      ),
@@ -165,14 +163,13 @@ items = [
 ]
 # Same six-field contract; only select the two-wallet version when Google is enabled.
 attendee = next(item for item in items if item[0] == 'event_attendee_ticket')
+apple_badge = wallet_badge('Add to Apple Wallet', '$ticket_url/apple.pkpass',
+                           'add-to-apple-wallet.png', 151, 47)
 items.append(
     ('event_attendee_ticket_wallets', *attendee[1:4], attendee[4].replace(
-        p('<a href="$ticket_url" style="color:#ffb48c">Obrir la meva entrada</a>'
-          ),
+        apple_badge, apple_badge +
         wallet_badge('Add to Google Wallet', '$ticket_url/google-wallet',
-                     'add-to-google-wallet.png', 283, 50) +
-        p('<a href="$ticket_url" style="color:#ffb48c">Obrir la meva entrada</a>'
-          )), attendee[5]))
+                     'add-to-google-wallet.png', 283, 50)), attendee[5]))
 for key, subject, kicker, title, body, reason in items:
     kicker_markup = f'<p style="margin:0 0 16px;font-size:11px;letter-spacing:1.3px;color:#ff9b66;font-weight:bold">{kicker}</p>' if kicker else ''
     text = f'''<!doctype html>
