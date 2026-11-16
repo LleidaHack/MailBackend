@@ -83,3 +83,14 @@ https://developers.google.com/static/wallet/download-assets/add-to-wallet-png.zi
 Both assets are mirrored under `src/static/images/hackeps-2026` and must be
 published alongside the existing email images. The reminder also links to
 `$_front_link/perfil`, where participants can retrieve their QR.
+
+## Shared participant, mentor and staff invitation
+
+`event_attendee_ticket` has the positional fields
+`name,event_name,role,code,qr_url,ticket_url`. The caller supplies HTML-escaped
+values and encodes commas as `&#44;`. The new template deliberately keeps the
+existing ticket and reminder contracts intact. Its button opens a personal
+backend page containing the QR and available Wallet actions; no login is needed.
+It makes no unsupported Google Wallet promise. The page must check eligibility
+on every request. Apply `20261116_attendee_ticket` before deploying a backend that
+loads this template. Migration is insert-only and preserves historical mail.
