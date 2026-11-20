@@ -1,6 +1,6 @@
 # HackEPS 2026 email design proposal
 
-Open index.html to compare twelve email previews at desktop and mobile widths.
+Open index.html to compare email previews at desktop and mobile widths.
 Templates contain existing backend variables; previews contain fictional examples.
 This folder is not loaded by the mail service. No emails have been sent.
 
@@ -25,6 +25,21 @@ client rendering, asset URLs and escaping of user-supplied contact fields. This
 proposal does not change the renderer or activate templates.
 
 Preview links use example.test and fictional tokens, never real account tokens.
+
+## Application rejection
+
+`event_hacker_rejected` communicates a declined application in Catalan, thanking
+the applicant without inventing a reason or promising a place in a future edition.
+Suggested subject: **Sobre la teva inscripció · HackEPS**.
+
+Apply migration `20261120_hacker_rejected` (`alembic upgrade head`) to install it
+in existing databases. Supply `name,event_name`, in that order, as HTML-escaped
+values, encoding commas as `&#44;` for the positional mail API.
+
+The application backend must resolve the template by name and queue this email
+when an application is rejected, supplying the recipient and subject separately
+and preventing duplicate notifications. Adding this template does not implement
+that external rejection trigger or send any mail.
 
 ## Company invitations and place-release reminders
 
