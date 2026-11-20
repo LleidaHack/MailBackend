@@ -60,15 +60,19 @@ items = [
                 '$_front_link/assistance?confirm=true&token=$token') +
      p('Si no pots venir, ens ajudaràs a alliberar la plaça: <a style="color:#ffb48c" href="$_front_link/assistance?confirm=false&token=$token">No podré assistir-hi</a>.'
        ), 'Has rebut aquest correu perquè t’has inscrit a la HackEPS.'),
-    ('event_hacker_rejected', 'Sobre la teva inscripció', '',
-     'Gràcies per voler<br>formar-ne part.',
+    ('event_hacker_rejected', 'Sobre la teva inscripció',
+     '', 'Gràcies per voler<br>formar-ne part.',
      p('Hola, <strong>$name</strong>,') +
-     p('Gràcies per inscriure’t a <strong>$event_name</strong> i per les ganes de compartir aquesta experiència amb nosaltres.') +
-     p('Hem revisat la teva candidatura i ens sap greu comunicar-te que aquesta vegada no ha estat seleccionada per participar-hi.') +
-     p('Sabem que no és la notícia que esperaves i t’agraïm el temps i la il·lusió que has dedicat a la inscripció.') +
-     p('Ens agradaria retrobar-te en futures edicions i en altres activitats de la comunitat LleidaHack.') +
-     p('Si tens cap dubte, ens pots escriure a <a style="color:#ffb48c" href="mailto:$_contact_mail">$_contact_mail</a>.'),
-     'Has rebut aquest correu perquè t’has inscrit a la HackEPS.'),
+     p('Gràcies per inscriure’t a <strong>$event_name</strong> i per les ganes de compartir aquesta experiència amb nosaltres.'
+       ) +
+     p('Hem revisat la teva candidatura i ens sap greu comunicar-te que aquesta vegada no ha estat seleccionada per participar-hi.'
+       ) +
+     p('Sabem que no és la notícia que esperaves i t’agraïm el temps i la il·lusió que has dedicat a la inscripció.'
+       ) +
+     p('Ens agradaria retrobar-te en futures edicions i en altres activitats de la comunitat LleidaHack.'
+       ) +
+     p('Si tens cap dubte, ens pots escriure a <a style="color:#ffb48c" href="mailto:$_contact_mail">$_contact_mail</a>.'
+       ), 'Has rebut aquest correu perquè t’has inscrit a la HackEPS.'),
     ('event_hacker_reminder', 'Recordatori de confirmació',
      '04 / ENS FALTA EL TEU SÍ', 'No et quedis<br>fora del repte.',
      p('Hola, <strong>$name</strong>!') +
@@ -181,8 +185,8 @@ items.append(
                      'add-to-google-wallet.png', 283, 50)), attendee[5]))
 for key, subject, kicker, title, body, reason in items:
     preheader = ('Gràcies pel teu interès i pel temps dedicat a la inscripció.'
-                 if key == 'event_hacker_rejected'
-                 else 'La teva pròxima aventura comença aquí.')
+                 if key == 'event_hacker_rejected' else
+                 'La teva pròxima aventura comença aquí.')
     kicker_markup = f'<p style="margin:0 0 16px;font-size:11px;letter-spacing:1.3px;color:#ff9b66;font-weight:bold">{kicker}</p>' if kicker else ''
     text = f'''<!doctype html>
 <html lang="ca"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="dark light"><meta name="supported-color-schemes" content="dark light"><title>{subject} · HackEPS</title>
