@@ -125,9 +125,7 @@ items = [
      wallet_badge('Add to Apple Wallet', '$ticket_url/apple.pkpass',
                   'add-to-apple-wallet.png', 151, 47) +
      p('L’entrada és personal i intransferible. No comparteixis el QR ni els enllaços de Wallet.'
-       ),
-     ''
-     ),
+       ), ''),
     ('event_hacker_ticket_reminder', 'Falta poc! Guarda la teva entrada', '',
      'La teva entrada', p('Hola, <strong>$name</strong>!') +
      p('D’aquí a pocs dies ens veiem a <strong>$event_name</strong>. Ja tens la plaça confirmada: guarda aquesta entrada i ensenya el QR al check-in.'

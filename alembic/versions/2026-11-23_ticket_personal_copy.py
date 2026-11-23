@@ -25,9 +25,11 @@ def upgrade():
             sa.text(
                 "UPDATE template SET html = REPLACE(html, :old, :new) "
                 "WHERE name IN ('event_attendee_ticket', 'event_attendee_ticket_wallets') "
-                "AND internal = true"
-            ),
-            {"old": old, "new": new},
+                "AND internal = true"),
+            {
+                "old": old,
+                "new": new
+            },
         )
 
 
