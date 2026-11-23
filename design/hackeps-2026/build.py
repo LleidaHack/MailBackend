@@ -124,10 +124,8 @@ items = [
        ) + qr('$code', '$qr_url', '$code', show_hint=False) +
      wallet_badge('Add to Apple Wallet', '$ticket_url/apple.pkpass',
                   'add-to-apple-wallet.png', 151, 47) +
-     p('L’entrada és personal: no comparteixis el QR ni els enllaços de Wallet.'
-       ),
-     'Has rebut aquesta entrada com a participant confirmat, mentor o membre del staff de l’esdeveniment.'
-     ),
+     p('L’entrada és personal i intransferible. No comparteixis el QR ni els enllaços de Wallet.'
+       ), ''),
     ('event_hacker_ticket_reminder', 'Falta poc! Guarda la teva entrada', '',
      'La teva entrada', p('Hola, <strong>$name</strong>!') +
      p('D’aquí a pocs dies ens veiem a <strong>$event_name</strong>. Ja tens la plaça confirmada: guarda aquesta entrada i ensenya el QR al check-in.'
@@ -204,7 +202,7 @@ for key, subject, kicker, title, body, reason in items:
 <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin-top:30px;border-top:1px solid #565656"><tr><td style="padding-top:22px;font:14px/1.7 'Courier New',monospace;color:#ccc"><strong style="color:#fff">L’equip de LleidaHack</strong></td><td width="68" style="padding-top:16px"><img src="$_static_folder/hackeps-2026/hacker.png" width="64" alt="" style="display:block;width:64px;height:auto;border:0"></td></tr></table>
 </td></tr>
 <tr><td bgcolor="#ff7430" align="center" style="padding:22px;color:#232323;font:700 13px/1.8 'Courier New',monospace"><a href="https://www.instagram.com/lleidahack/" style="color:#232323">Instagram</a> &nbsp; / &nbsp; <a href="https://www.linkedin.com/company/lleidahack/" style="color:#232323">LinkedIn</a> &nbsp; / &nbsp; <a href="https://x.com/lleidahack" style="color:#232323">X</a></td></tr>
-<tr><td align="center" style="padding:22px 24px;font:12px/1.7 'Courier New',monospace;color:#bcbcbc">{reason}<br>Necessites ajuda? <a href="mailto:$_contact_mail" style="color:#ffb48c">$_contact_mail</a></td></tr>
+<tr><td align="center" style="padding:22px 24px;font:12px/1.7 'Courier New',monospace;color:#bcbcbc">{reason + "<br>" if reason else ""}Necessites ajuda? <a href="mailto:$_contact_mail" style="color:#ffb48c">$_contact_mail</a></td></tr>
 </table></td></tr></table></body></html>'''
     (root / 'templates' / f'{key}.html').write_text(text)
     sample = {
