@@ -21,7 +21,10 @@ def upgrade():
                 (creator_id, name, description, html, created_date, is_active, internal)
             SELECT 0, :name, :name, :html, CURRENT_DATE, true, true
             WHERE NOT EXISTS (SELECT 1 FROM template WHERE name = :name)
-        """), {"name": name, "html": markup})
+        """), {
+            "name": name,
+            "html": markup
+        })
 
 
 def downgrade():
