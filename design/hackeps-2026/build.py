@@ -109,6 +109,12 @@ items = [
      p('Presenta’t, comparteix idees i comença a conèixer la resta de hackers.'
        ),
      'Has rebut aquesta invitació com a participant de la comunitat HackEPS.'),
+    ('event_discord_invite', 'Uneix-te al Discord de la HackEPS', '',
+     'Uneix-te al servidor<br>de Discord de la HackEPS.',
+     p('Hola, <strong>$name</strong>!') +
+     p('Ja pots unir-te al servidor oficial de Discord de <strong>$event_name</strong>. Hi publicarem els avisos de l’organització i és el punt de trobada per fer team building: busca equip, coneix la resta de hackers i parla amb els mentors.'
+       ) + action('Uneix-te al Discord', '$discord_url'),
+     'Has rebut aquest correu perquè participes a la HackEPS.'),
     ('event_hacker_ticket', 'La teva entrada', '05 / TOT A PUNT',
      'Aquest és<br>el teu tiquet.', p('Hola, <strong>$name</strong>!') +
      p('Ja tens plaça confirmada a <strong>$event_name</strong>. Aquest QR és el teu tiquet d’entrada: ensenya’l al check-in i et donarem la teva acreditació.'
@@ -223,6 +229,7 @@ for key, subject, kicker, title, body, reason in items:
         'message':
         'Hola! Podem participar amb persones de diferents universitats? Moltes gràcies!',
         'slack_url': 'https://example.test/slack',
+        'discord_url': 'https://discord.gg/example',
         'code': 'ABCDEFGHJKLMNPQRSTUV',
         'qr_url':
         'https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=ABCDEFGHJKLMNPQRSTUV',

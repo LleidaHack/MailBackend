@@ -41,6 +41,15 @@ when an application is rejected, supplying the recipient and subject separately
 and preventing duplicate notifications. Adding this template does not implement
 that external rejection trigger or send any mail.
 
+## Official Discord invitation
+
+`event_discord_invite` sends the official Discord server link to participants.
+Suggested subject: **Uneix-te al Discord de la HackEPS**.
+
+Apply migration `20261124_discord_invite` (`alembic upgrade head`) to install it
+in existing databases. Supply `name,event_name,discord_url`, in that order, as
+HTML-escaped values, encoding commas as `&#44;` for the positional mail API.
+
 ## Company invitations and place-release reminders
 
 The two additional templates are registered in `InternalTemplates` and installed
