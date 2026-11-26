@@ -115,6 +115,17 @@ items = [
      p('Ja pots unir-te al servidor oficial de Discord de <strong>$event_name</strong>. Hi publicarem els avisos de l’organització i és el punt de trobada per fer team building: busca equip, coneix la resta de hackers i parla amb els mentors.'
        ) + action('Uneix-te al Discord', '$discord_url'),
      'Has rebut aquest correu perquè participes a la HackEPS.'),
+    ('event_discord_invite_mentor', 'Uneix-te al Discord de la HackEPS', '',
+     'Uneix-te al servidor<br>de Discord de la HackEPS.',
+     p('Hola, <strong>$name</strong>!') +
+     p('Gràcies per ser mentor a <strong>$event_name</strong>. Ja pots unir-te al servidor oficial de Discord: hi publicarem els avisos de l’organització i és on els equips et demanaran ajuda durant la hackató.'
+       ) +
+     p('Quan entris amb aquest enllaç, rebràs automàticament el rol de mentor.'
+       ) + action('Uneix-te al Discord', '$discord_url') +
+     note(
+         'Aquest enllaç és personal',
+         'No el comparteixis: qualsevol persona que hi entri rebrà el rol de mentor.'
+     ), 'Has rebut aquest correu perquè ets mentor a la HackEPS.'),
     ('event_hacker_ticket', 'La teva entrada', '05 / TOT A PUNT',
      'Aquest és<br>el teu tiquet.', p('Hola, <strong>$name</strong>!') +
      p('Ja tens plaça confirmada a <strong>$event_name</strong>. Aquest QR és el teu tiquet d’entrada: ensenya’l al check-in i et donarem la teva acreditació.'
